@@ -47,7 +47,7 @@ const conversationId = "general";
 // const axios = require("axios");
 
 // const bot = new SlackBot({
-//   token: "xoxb-1041120149622-1039238871621-kLc0XsQzAHiGTUH22kiCLH6q",
+//   token: INSERT_TOKEN
 //   name: "testtest"
 // });
 
