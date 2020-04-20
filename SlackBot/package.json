@@ -1,0 +1,17 @@
+{
+  "name": "slackbot",
+  "version": "1.0.0",
+  "description": "test app slackbot",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/web-api": "^5.8.0",
+    "axios": "^0.19.2",
+    "nodemon": "^2.0.2",
+    "slackbots": "^1.2.0"
+  }
+}

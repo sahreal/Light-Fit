@@ -1,0 +1,18 @@
+{
+  "name": "landing-page",
+  "version": "1.0.0",
+  "description": "landing page to download slackbot",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "css": "^2.2.4",
+    "express": "^4.17.1",
+    "node": "^13.13.0",
+    "nodemon": "^2.0.3"
+  }
+}
