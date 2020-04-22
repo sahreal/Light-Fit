@@ -58,7 +58,17 @@ const bot = new WebClient(token);
 // CronJob schedules posts to be sent
 // TODO: How to send posts to channels outside the initial installed workspace
 (async () => {
-  var morningJob = new CronJob(
+  const setPresence = await bot.users.setPresence({
+    token: token,
+    presence: "auto"
+  });
+
+  const post = await bot.chat.postMessage({
+    channel: "coolbot-test-sandbox",
+    text: "Hey I am coolBot. I'm testing this"
+  });
+
+  const morningJob = new CronJob(
     "00 00 9 * * 1-5",
     async function() {
       await bot.chat.postMessage({
@@ -71,7 +81,7 @@ const bot = new WebClient(token);
     true,
     "America/New_York"
   );
-  var middayJob = new CronJob(
+  const middayJob = new CronJob(
     "00 00 12 * * 1-5",
     async function() {
       await bot.chat.postMessage({
@@ -84,7 +94,7 @@ const bot = new WebClient(token);
     true,
     "America/New_York"
   );
-  var afternoonJob = new CronJob(
+  const afternoonJob = new CronJob(
     "00 00 15 * * 1-5",
     async function() {
       await bot.chat.postMessage({
@@ -97,7 +107,7 @@ const bot = new WebClient(token);
     true,
     "America/New_York"
   );
-  var eveningJob = new CronJob(
+  const eveningJob = new CronJob(
     "00 00 18 * * 1-5",
     async function() {
       await bot.chat.postMessage({
