@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-Parser");
+const bodyParser = require("body-parser");
 const path = require("path");
 const axios = require("axios");
 
@@ -13,10 +13,10 @@ app.get("/app-slack-oauth", (req, res) => {
 
   axios
     .post("https://slack.com/api/oauth.v2.access", body, { headers })
-    .then(resp => {
+    .then((resp) => {
       res.send(resp.data);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(`ERROR: ${JSON.stringify(err.response.data)}`);
     });
 });
