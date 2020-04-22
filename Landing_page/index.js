@@ -6,7 +6,7 @@ const axios = require("axios");
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("/app-slack-oauth", (req, res) => {
-  const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://slackbot-coolbot.herokuapp.com/app-slack-oauth`;
+  const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://light-fit.netlify.app/app-slack-oauth`;
   const headers = { "Content-Type": "application/x-www-form-urlencoded" };
 
   axios
