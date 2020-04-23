@@ -4,13 +4,16 @@
   "description": "test app slackbot",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "start-dev": "nodemon -r dotenv/config index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@slack/web-api": "^5.8.0",
     "axios": "^0.19.2",
+    "cron": "^1.8.2",
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.2",
     "slackbots": "^1.2.0"
   }
