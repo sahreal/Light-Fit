@@ -1,9 +1,6 @@
 package-lock.json
 /node_modules
-<<<<<<< HEAD
 /config
 data.json
 mongo.js
-=======
->>>>>>> 84ba76c2e7eaffb379f243fed9803d7f1a5ba21d
 .env

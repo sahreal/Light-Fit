@@ -1,4 +1,11 @@
 var mongoose = require("mongoose");
+const db = require("../config/key.js").mongoURI;
+
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch(err => console.log(err));
+
 var Schema = mongoose.Schema;
 
 const Morning = new Schema(
@@ -6,7 +13,7 @@ const Morning = new Schema(
     Prompt: String,
     Time: String
   },
-  { collection: "prompts" }
+  { collection: "Morning" }
 );
 
 const MidDay = new Schema(
@@ -14,7 +21,7 @@ const MidDay = new Schema(
     Prompt: String,
     Time: String
   },
-  { collection: "prompts" }
+  { collection: "Mid-day" }
 );
 
 const Afternoon = new Schema(
@@ -22,7 +29,7 @@ const Afternoon = new Schema(
     Prompt: String,
     Time: String
   },
-  { collection: "prompts" }
+  { collection: "Afternoon" }
 );
 
 const Evening = new Schema(
@@ -30,7 +37,7 @@ const Evening = new Schema(
     Prompt: String,
     Time: String
   },
-  { collection: "prompts" }
+  { collection: "Evening" }
 );
 
 module.exports.Morning = mongoose.model("Morning", Morning);

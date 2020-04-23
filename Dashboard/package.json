@@ -11,7 +11,7 @@
     "seed": "node -r dotenv/config lib/seed.js",
     "dev": "webpack -d --watch & nodemon index.js",
     "build-dev": "webpack -d --mode development",
-    "start": "node index.js",
+    "start": "nodemon server/index.js",
     "build": "webpack -p --mode production"
   },
   "dependencies": {
