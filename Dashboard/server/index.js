@@ -7,7 +7,7 @@ const router = require("./routes.js");
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../dist/")));
-app.use("/go", router);
+app.use("/", router);
 
 app.get("/app-slack-oauth", (req, res) => {
   const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://light-fit.herokuapp.com/app-slack-oauth`;

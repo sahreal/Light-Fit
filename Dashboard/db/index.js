@@ -1,8 +1,8 @@
 var mongoose = require("mongoose");
-const db = require("../config/key.js").mongoURI;
+const db = require("../config/key.js");
 
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db.mongoURI, { useNewUrlParser: true })
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));
 
