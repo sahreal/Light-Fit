@@ -5,10 +5,10 @@ const uri = process.env.MONGOURI;
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
-client.connect(err => {
+client.connect((err) => {
   if (err) {
     console.log(err);
   }
@@ -21,10 +21,10 @@ client.connect(err => {
       const slackPrompts = JSON.parse(data);
       collection
         .insertMany(slackPrompts)
-        .then(data => {
+        .then((data) => {
           client.close();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           client.close();
         });
