@@ -311,7 +311,10 @@
     "Prompt": "We may love yogurt, but we also love water. What do you love? Your body told us water, drink some water.",
     "Time": "Mid-day"
   },
-  { "Prompt": "Water: drink it.", "Time": "Mid-day" },
+  {
+    "Prompt": "Water: drink it.",
+    "Time": "Mid-day"
+  },
   {
     "Prompt": "Did you hear that one joke about the water that someone drank? It was a good one because it reminded us to hydrate. Drink water.",
     "Time": "Mid-day"
