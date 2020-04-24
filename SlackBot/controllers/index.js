@@ -31,5 +31,7 @@ module.exports = {
         as_user: "self",
       });
     })();
+
+    res.send(resp.data);
   },
 };
