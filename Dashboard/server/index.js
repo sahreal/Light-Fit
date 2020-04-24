@@ -6,7 +6,7 @@ const router = require("./routes.js");
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../dist/")));
-app.use("/go", router);
+app.use("/", router);
 
 const port = process.env.PORT || 3000;
 
