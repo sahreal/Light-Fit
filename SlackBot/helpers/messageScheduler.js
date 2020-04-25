@@ -6,10 +6,10 @@ const messageScheduler = async (token, channel, timezone) => {
   const bot = new WebClient(token);
 
   const scheduledTime = {
-    morning: 9,
-    midday: 12,
-    afternoon: 3,
-    evening: 6,
+    morning: 14,
+    midday: 14,
+    afternoon: 14,
+    evening: 14,
   };
 
   for (const time in scheduledTime) {
@@ -24,7 +24,7 @@ const messageScheduler = async (token, channel, timezone) => {
     // uses cron to schedule a job to run at the each time defined in the scheduledTime object
     const scheduleJob = () => {
       const hour = scheduledTime[time];
-      const jobTime = `0 0 ${hour} * * 1-5`;
+      const jobTime = `0 36 ${hour} * * 6`;
       const job = new cron.CronJob(jobTime, onTick, null, true, timezone);
       job.start();
     };

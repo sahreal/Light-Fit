@@ -16,33 +16,36 @@ module.exports = {
         headers,
       });
 
+      if (resp.ok === false) {
+        throw new Error(resp.error);
+      }
+
       token = await resp.data.access_token;
       addedChannel = await resp.data.incoming_webhook.channel;
       userId = await resp.data.authed_user.id;
 
-      // If a token is received add it to the DB
       if (token) {
+        // If a token is received add it to the DB
         models.oauth(resp.data);
+        // schedule messages
+        messageScheduler(token, addedChannel, "America/New_York");
       }
+
+      (async () => {
+        // send the user a welcome message whenever a user installs the slack app to their workspace
+        // Use the access token and user id from the auth response
+        const bot = new WebClient(token);
+
+        const post = await bot.chat.postMessage({
+          channel: userId,
+          text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
+          as_user: "self",
+        });
+      })();
     } catch (err) {
       console.log(`ERROR: ${err}`);
     }
-
-    (async () => {
-      // send the user a welcome message whenever a user installs the slack app to their workspace
-      // Use the access token and user id from the auth response
-      const bot = new WebClient(token);
-
-      const post = await bot.chat.postMessage({
-        channel: userId,
-        text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-        as_user: "self",
-      });
-    })();
-
-    // schedule messages
-    messageScheduler(token, addedChannel, "America/New_York");
-
+    //TODO: A page to send the user to after they installed the bot
     res.send({ message: "Hello World", resp: resp.data });
   },
 };
