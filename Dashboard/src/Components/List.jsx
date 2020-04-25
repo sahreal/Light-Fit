@@ -1,14 +1,25 @@
 import React from "react";
 import ListEntry from "./ListEntry";
 
-function List({ list }) {
+const List = ({ list, updateEntries, deleteEntries, deleteHandler }) => {
   return (
     <div>
-      {list.map((item, index) => {
-        return <ListEntry key={index} prompt={item.Prompt} time={item.Time} />;
-      })}
+      {list.length > 0
+        ? list.map((item, index) => {
+            return (
+              <ListEntry
+                key={index}
+                prompt={item.Prompt}
+                time={item.Time}
+                updateEntries={updateEntries}
+                deleteEntries={deleteEntries}
+                deleteHandler={deleteHandler}
+              />
+            );
+          })
+        : null}
     </div>
   );
-}
+};
 
 export default List;

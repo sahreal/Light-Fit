@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import List from "./Components/List";
+import Form from "./Components/Form";
+import { thistle } from "color-name";
 
 class App extends React.Component {
   constructor(props) {
@@ -12,13 +14,21 @@ class App extends React.Component {
       AfternoonList: [],
       EveningList: [],
       TokenCount: [],
-      string: "Afternoon",
-      list: []
+      string: "",
+      edit: "",
+      value: ""
     };
 
+    //CRUD
     this.getEntries = this.getEntries.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.postEntries = this.postEntries.bind(this);
+    this.updateEntries = this.updateEntries.bind(this);
+    this.deleteEntries = this.deleteEntries.bind(this);
+    //Input Handlers
+    this.inputChange = this.inputChange.bind(this);
+    this.valueChange = this.valueChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.deleteHandler = this.deleteHandler.bind(this);
   }
 
   componentDidMount() {
@@ -42,14 +52,52 @@ class App extends React.Component {
       .catch(err => console.log(err));
   }
 
-  handleChange(event) {
-    console.log(event.target.value, "HEYNNOEW");
-    this.setState({ string: event.target.value });
+  postEntries(newMessage) {
+    axios
+      .post("/postOne", newMessage)
+      .then(() => {
+        this.getEntries(this.state.value);
+      })
+      .catch(err => console.log(err));
+  }
+
+  inputChange(event) {
+    let value = event.target.value;
+    console.log(value, "TYPE TTYP");
+    this.setState({ edit: value });
+  }
+
+  valueChange(event) {
+    let value = event.target.value;
+    console.log(value, "enter Select");
+    this.setState({ value: value });
   }
 
   handleSubmit(event) {
-    alert("Your favorite flavor is: " + this.state.value);
     event.preventDefault();
+    this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
+  }
+
+  updateEntries(obj) {
+    console.log(obj, "WHAT NOW");
+    // axios
+    //   .put("/update", obj)
+    //   .then(() => {
+    //     this.getEntries(obj.Time);
+    //   })
+    //   .catch(err => console.log(err));
+  }
+
+  deleteEntries(message) {
+    console.log(message, "WHAT IS THIS");
+    // axios
+    //   .delete("/todos", { data: { task: todo } })
+    //   .then(() => this.getTodos())
+    //   .catch(err => console.log(err));
+  }
+
+  deleteHandler(prompt) {
+    console.log(ref.current, " hhhh");
   }
 
   render() {
@@ -57,28 +105,21 @@ class App extends React.Component {
       <div>
         <h1>Wow What an Amazing Dashboard</h1>
         <p>Download Ticker/Count Goes Here</p>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Pick your favorite flavor:
-            <select value={this.state.string} onChange={this.handleChange}>
-              <option value="grapefruit">Grapefruit</option>
-              <option value="lime">Lime</option>
-              <option value="coconut">Coconut</option>
-              <option value="mango">Mango</option>
-            </select>
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
+        <Form
+          handleSubmit={this.handleSubmit}
+          valueChange={this.valueChange}
+          inputChange={this.inputChange}
+          value={this.state.value}
+          edit={this.state.edit}
+        />
 
-        <ul>
-          Followed by - Get all Entries from Database
-          <li>List entires</li>
-          <li>Edit/Update button</li>
-          <li>Delete Button</li>
-        </ul>
-        <button onClick={() => this.getEntries}> click me</button>
         <p>Morning</p>
-        <List list={this.state.MorningList} />
+        <List
+          list={this.state.MorningList}
+          updateEntries={this.updateEntries}
+          deleteHandler={this.deleteHandler}
+          deleteEntries={this.deleteEntries}
+        />
         <p>MidDay</p>
         <List list={this.state.MidDayList} />
         <p>Afternoon</p>
@@ -91,29 +132,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// postEntries(todo) {
-//   axios
-//     .post("/todos", todo)
-//     .then(() => {
-//       this.getTodos();
-//     })
-//     .catch(err => console.log(err));
-// }
-
-// updateEntries(todo) {
-//   axios
-//     .put("/todos", todo)
-//     .then(() => {
-//       this.getTodos();
-//     })
-//     .catch(err => console.log(err));
-// }
-
-// deleteEntries(todo) {
-//   console.log(todo, "WHAT IS THIS");
-//   axios
-//     .delete("/todos", { data: { task: todo } })
-//     .then(() => this.getTodos())
-//     .catch(err => console.log(err));
-// }

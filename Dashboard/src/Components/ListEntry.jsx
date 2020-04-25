@@ -1,20 +1,27 @@
 import React from "react";
+import "@babel/polyfill";
 
-function ListEntry({ prompt, time }) {
+const ListEntry = ({ prompt, time, deleteHandler }) => {
+  const deleteH = event => {
+    console.log(event.target);
+  };
+
   return (
     <div>
       <span>
         {" "}
         <strong>{time}</strong>
-        ----------
+        --------
         {prompt}
       </span>
+
       <div>
-        <button>Update</button>
-        <button>Delete</button>
+        <button value={prompt} onClick={deleteH}>
+          Delete
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default ListEntry;

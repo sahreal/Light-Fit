@@ -14,7 +14,6 @@ const timeOfDay = {
 module.exports = {
   command: {
     getAll: (req, res) => {
-      console.log(req.query, "HEY");
       let time = req.query.timeOfDay;
       timeOfDay[time].collection.find(null, async function(err, results) {
         if (err) {
@@ -30,9 +29,11 @@ module.exports = {
       });
     },
     postOne: async (req, res) => {
-      let result = req.body;
+      let time = req.body.timeOfDay;
+      let result = { Prompt: req.body.input, Time: time };
+      console.log(result, "RESULT");
       try {
-        await Afternoon.collection.insertOne(result);
+        await timeOfDay[time].collection.insertOne(result);
         res.sendStatus(200);
       } catch (err) {
         console.log(err, "update post error");
@@ -40,7 +41,7 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
-
+      console.log(request);
       Afternoon.collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
         {
