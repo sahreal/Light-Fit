@@ -1,84 +1,70 @@
 const MongoClient = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
 const uri = require("../../config/key").mongoURI;
 const { Morning, Afternoon, MidDay, Evening } = require("../../db/index");
-const client = new MongoClient(uri, { useUnifiedTopology: true });
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const timeOfDay = {
+  Morning: Morning,
+  MidDay: MidDay,
+  Afternoon: Afternoon,
+  Evening: Evening
+};
 
 module.exports = {
   command: {
     getAll: (req, res) => {
-      client.connect((err, client) => {
-        if (err) res.sendStatus(500);
-        else {
-          console.log("get - connected");
-          const collection = client.db("SlackApp").collection("Afternoon");
-          collection.find(async (err, result) => {
-            try {
-              let temp = await result.toArray();
-              res.send(temp).status(201);
-            } catch (err) {
-              console.log(err, "Get promise error");
-            }
-          });
+      console.log(req.query, "HEY");
+      let time = req.query.timeOfDay;
+      timeOfDay[time].collection.find(null, async function(err, results) {
+        if (err) {
+          return console.error(err);
+        } else {
+          try {
+            let temp = await results.toArray();
+            res.send(temp).status(201);
+          } catch (err) {
+            console.log(err, "Get promise error");
+          }
         }
       });
     },
-    postOne: (req, res) => {
+    postOne: async (req, res) => {
       let result = req.body;
-      client.connect(async (err, client) => {
-        try {
-          if (err) res.sendStatus(500);
-          else {
-            console.log("post - connected");
-            const collection = client.db("SlackApp").collection("Afternoon");
-            await collection.insertOne(result);
-            res.sendStatus(201);
-          }
-        } catch {
-          console.log(err, "post promise error");
-        }
-      });
+      try {
+        await Afternoon.collection.insertOne(result);
+        res.sendStatus(200);
+      } catch (err) {
+        console.log(err, "update post error");
+      }
     },
     update: (req, res) => {
       let request = req.body;
-      client.connect((err, client) => {
-        if (err) res.sendStatus(500);
-        else {
-          console.log("update - connected");
-          const collection = client.db("SlackApp").collection("Afternoon");
 
-          collection.findOneAndReplace(
-            { Prompt: request.oldPrompt },
-            {
-              Prompt: request.Prompt,
-              Time: request.Time
-            },
-            async (err, result) => {
-              try {
-                await result.value;
-                res.sendStatus(200);
-              } catch (err) {
-                console.log(err);
-              }
-            }
-          );
-        }
-      });
-    },
-    deleteOne: (req, res) => {
-      let result = req.body;
-      client.connect(async (err, client) => {
-        try {
-          if (err) res.sendStatus(500);
-          else {
-            console.log("delete - connected");
-            const collection = client.db("SlackApp").collection("Afternoon");
-            await collection.deleteOne(result);
-            res.sendStatus(202);
+      Afternoon.collection.findOneAndReplace(
+        { Prompt: request.oldPrompt },
+        {
+          Prompt: request.Prompt,
+          Time: request.Time
+        },
+        async (err, result) => {
+          try {
+            await result.value;
+            res.sendStatus(200);
+          } catch (err) {
+            console.log(err, "update promise error");
           }
-        } catch (err) {
-          console.log(err);
         }
-      });
+      );
+    },
+    deleteOne: async (req, res) => {
+      let result = req.body;
+      try {
+        await Afternoon.collection.deleteOne(result);
+        res.sendStatus(200);
+      } catch (err) {
+        console.log(err, "delete promise error");
+      }
     }
   }
 };
