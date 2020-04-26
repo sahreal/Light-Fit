@@ -36,7 +36,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
     // uses cron to schedule a job to run at the each time defined in the scheduledTime object
     const scheduleJob = () => {
       const hour = scheduledTime[time];
-      const jobTime = `0 00 ${hour} * * 0`;
+      const jobTime = `0 00 ${hour} * * 0-6`;
       const job = new cron.CronJob(jobTime, getMessage, null, true, timezone);
       // stores the job in the cronMonitor object for access
       cronMonitor[workspace]
