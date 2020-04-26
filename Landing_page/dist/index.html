@@ -6,14 +6,44 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <div>
-      <h1>landing page goes here</h1>
+    <div class="header">
+      <img src="./transparent.png" />
+      <div class="header-text">
+        <p>Contact Us</p>
+        <p class="privacy">Privacy Policy</p>
+      </div>
+    </div>
+    <div class="words">
+      <h1 class="title">Light + Fit</h1>
+      <span>
+        <p>
+          Incorporating self-care and wellness into your daily routines doesn’t
+          have to be all or nothing. Light + Fit believes health deserves a
+          lighter outlook! It is about what fits for you. Through this app, we
+          want to bring feel-good experiences that help you focus on your
+          wellness, while having fun along the way.
+        </p>
+        <p>
+          The new app will share easy to do at-home wellness videos, including
+          workouts routines and mediations, along with movement reminders and
+          WFH wellness tips throughout the workday. Messages will include
+          reminders to drink water, tips on how to best organize your desk for
+          productivity, and ways to communicate boundaries to friends and family
+          when working remotely.
+        </p>
+        <p>
+          To create the content in this app, Light + Fit has partnered with
+          Julianne Hough’s fitness platform Kinrgy and
+          <a href="https://movemeantfoundation.org/covid-19-relief"
+            >Movemeant Foundation</a
+          >
+        </p>
+      </span>
       <a
         href="https://slack.com/oauth/v2/authorize?client_id=1041120149622.1081472322500&scope=channels:join,chat:write,incoming-webhook,links:write,users:write&redirect_uri=https://light-fit.herokuapp.com/app-slack-oauth"
         ><img
+          id="slack-button"
           alt="Add to Slack"
-          height="40"
-          width="139"
           src="https://platform.slack-edge.com/img/add_to_slack.png"
           srcset="
             https://platform.slack-edge.com/img/add_to_slack.png    1x,
@@ -21,8 +51,5 @@
           "
       /></a>
     </div>
-    <button onclick="window.location.href = 'https://slack.com/'">
-      Click Here
-    </button>
   </body>
 </html>
