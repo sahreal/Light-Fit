@@ -6,6 +6,7 @@ const express = require("express");
 const app = express();
 const routes = require("./routes/index.js");
 const messageScheduler = require("./helpers/messageScheduler.js");
+const SlackToken = require("./token/SlackToken");
 
 app.use("/", routes);
 
@@ -19,4 +20,4 @@ app.listen(port, () =>
 );
 
 // Schedules for the default installed workspace
-messageScheduler(token, "coolbot-test-sandbox", "America/New_York");
+messageScheduler(SlackToken, "coolbot-test-sandbox", "America/New_York");
