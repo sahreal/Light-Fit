@@ -8,8 +8,8 @@ const bodyParser = require("body-parser");
 const routes = require("./routes/index.js");
 const reschedule = require("./helpers/messageRescheduler.js");
 
-app.use("/", routes);
 app.use(bodyParser.json());
+app.use("/", routes);
 
 // On server start up have the system reschedule all messages
 reschedule.rescheduleMessages();
