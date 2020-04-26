@@ -11,22 +11,22 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
     Morning: { time: 9, collection: Morning },
     Midday: { time: 12, collection: MidDay },
     Afternoon: { time: 15, collection: Afternoon },
-    Evening: { time: 17, collection: Evening },
+    Evening: { time: 17, collection: Evening }
   };
 
-  const getMessage = (timePeriod) => {
+  const getMessage = timePeriod => {
     let currentCollection = scheduledTime[timePeriod].collection;
 
     return currentCollection
       .find()
-      .then((data) => {
+      .then(data => {
         let index = Math.floor(Math.random() * (data.length - 1) + 1);
         bot.chat.postMessage({
           channel: channel,
-          text: data[index].Prompt, //Will be a function call to the db for a message
+          text: data[index].Prompt //Will be a function call to the db for a message
         });
       })
-      .catch((err) => console.error("Error Received in scheduled post: ", err));
+      .catch(err => console.error("Error Received in scheduled post: ", err));
   };
 
   for (const time in scheduledTime) {
