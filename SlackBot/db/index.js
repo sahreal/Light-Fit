@@ -27,7 +27,43 @@ const TokenCountSchema = mongoose.Schema({
   count: Number,
 });
 
+const Morning = new mongoose.Schema(
+  {
+    Prompt: String,
+    Time: String
+  },
+  { collection: "Morning" }
+);
+
+const MidDay = new mongoose.Schema(
+  {
+    Prompt: String,
+    Time: String
+  },
+  { collection: "Mid-day" }
+);
+
+const Afternoon = new mongoose.Schema(
+  {
+    Prompt: String,
+    Time: String
+  },
+  { collection: "Afternoon" }
+);
+
+const Evening = new mongoose.Schema(
+  {
+    Prompt: String,
+    Time: String
+  },
+  { collection: "Evening" }
+);
+
 const WorkspaceData = mongoose.model("Workspaces", WorkspaceDataSchema);
 const TokenCount = mongoose.model("TokenCounts", TokenCountSchema);
+const Morning = mongoose.model("Morning", Morning);
+const MidDay = mongoose.model("MidDay", MidDay);
+const Afternoon = mongoose.model("Afternoon", Afternoon);
+const Evening = mongoose.model("Evening", Evening);
 
-module.exports = { WorkspaceData, TokenCount };
+module.exports = { WorkspaceData, TokenCount,Morning,MidDay,Afternoon,Evening };

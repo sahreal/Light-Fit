@@ -13,7 +13,7 @@ module.exports = {
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers,
+        headers
       });
 
       if (resp.ok === false) {
@@ -45,7 +45,26 @@ module.exports = {
     } catch (err) {
       console.log(`ERROR: ${err}`);
     }
+<<<<<<< HEAD
     //TODO: A page to send the user to after they installed the bot
+=======
+
+    (async () => {
+      // send the user a welcome message whenever a user installs the slack app to their workspace
+      // Use the access token and user id from the auth response
+      const bot = new WebClient(token);
+
+      const post = await bot.chat.postMessage({
+        channel: userId,
+        text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
+        as_user: "self"
+      });
+    })();
+
+    // schedule messages
+    messageScheduler(token, addedChannel, "America/New_York");
+
+>>>>>>> master
     res.send({ message: "Hello World", resp: resp.data });
-  },
+  }
 };

@@ -1,10 +1,10 @@
 var mongoose = require("mongoose");
 const db = require("../config/key.js");
 
-mongoose
-  .connect(db.mongoURI, { useNewUrlParser: true })
-  .then(() => console.log("MongoDB successfully connected"))
-  .catch(err => console.log(err));
+// mongoose
+//   .connect(db.mongoURI, { useNewUrlParser: true })
+//   .then(() => console.log("MongoDB successfully connected"))
+//   .catch(err => console.log(err));
 
 var Schema = mongoose.Schema;
 
