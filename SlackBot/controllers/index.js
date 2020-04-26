@@ -2,6 +2,7 @@ const models = require("../models/index.js");
 const axios = require("axios");
 const { WebClient } = require("@slack/web-api");
 const messageScheduler = require("../helpers/messageScheduler.js");
+const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
@@ -13,36 +14,63 @@ module.exports = {
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers
+        headers,
       });
+
+      if (resp.ok === false) {
+        throw new Error(resp.error);
+      }
 
       token = await resp.data.access_token;
       addedChannel = await resp.data.incoming_webhook.channel;
       userId = await resp.data.authed_user.id;
 
-      // If a token is received add it to the DB
+      let bot;
       if (token) {
+        // If a token is received get the user's timezone info
+        // Add it to the workspace object and send the object to the DB
+        bot = new WebClient(token);
+        const userTZ = await bot.users.info({
+          token: token,
+          user: userId,
+        });
+        resp.data.tz = userTZ.user.tz;
         models.oauth(resp.data);
+        // schedule messages
+        messageScheduler(token, addedChannel, resp.data.tz, resp.data.team.id);
       }
+
+      (async () => {
+        // send the user a welcome message whenever a user installs the slack app to their workspace
+        // Use the access token and user id from the auth response
+        const post = await bot.chat.postMessage({
+          channel: userId,
+          text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
+          as_user: "self",
+        });
+      })();
+
+      //TODO: A page to send the user to after they installed the bot
+      res.status(201).send({ message: "Hello World", resp: resp.data });
     } catch (err) {
-      console.log(`ERROR: ${err}`);
+      console.error(`ERROR: ${err}`);
+      res.status(500).send({ err: err });
+    }
+  },
+  remove: async (req, res) => {
+    const workspaceId = req.body.team_id;
+    const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
+
+    // Removes the job from the DB
+    await models.removeWorkspace(workspaceId);
+
+    // iterate through the jobs and cancels each job
+    for (let job in jobs) {
+      jobs[job].stop();
     }
 
-    (async () => {
-      // send the user a welcome message whenever a user installs the slack app to their workspace
-      // Use the access token and user id from the auth response
-      const bot = new WebClient(token);
+    delete jobs;
 
-      const post = await bot.chat.postMessage({
-        channel: userId,
-        text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-        as_user: "self"
-      });
-    })();
-
-    // schedule messages
-    messageScheduler(token, addedChannel, "America/New_York");
-
-    res.send({ message: "Hello World", resp: resp.data });
-  }
+    res.sendStatus(204);
+  },
 };

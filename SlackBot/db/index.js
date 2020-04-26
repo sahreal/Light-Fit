@@ -1,39 +1,83 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
 
-const Morning = new Schema(
+(async () => {
+  try {
+    await mongoose.connect(process.env.MONGOURI, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+    });
+  } catch (err) {
+    console.error("Initial Connection error: ", err);
+  }
+})();
+
+const db = mongoose.connection;
+
+db.on("error", (err) => {
+  console.error("Connection error: ", err);
+});
+db.once("open", () => {
+  console.log("Connected to db...");
+});
+
+const WorkspaceDataSchema = new mongoose.Schema({
+  workspace_id: String,
+  token: String,
+  channel: String,
+  channel_name: String,
+  authed_user: String,
+  timezone: String,
+});
+
+const TokenCountSchema = new mongoose.Schema({
+  count: Number,
+});
+
+const MorningSchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Morning" }
 );
 
-const MidDay = new Schema(
+const MidDaySchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Mid-day" }
 );
 
-const Afternoon = new Schema(
+const AfternoonSchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Afternoon" }
 );
 
-const Evening = new Schema(
+const EveningSchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Evening" }
 );
 
-module.exports.Morning = mongoose.model("Morning", Morning);
-module.exports.MidDay = mongoose.model("MidDay", MidDay);
-module.exports.Afternoon = mongoose.model("Afternoon", Afternoon);
-module.exports.Evening = mongoose.model("Evening", Evening);
+const WorkspaceData = mongoose.model("Workspaces", WorkspaceDataSchema);
+const TokenCount = mongoose.model("TokenCounts", TokenCountSchema);
+const Morning = mongoose.model("Morning", MorningSchema);
+const MidDay = mongoose.model("MidDay", MidDaySchema);
+const Afternoon = mongoose.model("Afternoon", AfternoonSchema);
+const Evening = mongoose.model("Evening", EveningSchema);
+
+module.exports = {
+  WorkspaceData,
+  TokenCount,
+  Morning,
+  MidDay,
+  Afternoon,
+  Evening,
+};
