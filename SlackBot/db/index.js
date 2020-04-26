@@ -1,14 +1,22 @@
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGOURI, {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+(async () => {
+  try {
+    await mongoose.connect(process.env.MONGOURI, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+    });
+  } catch (err) {
+    console.error("Initial Connection error: ", err);
+  }
+})();
 
 const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, "Connection error:"));
+db.on("error", (err) => {
+  console.error("Connection error: ", err);
+});
 db.once("open", () => {
   console.log("Connected to db...");
 });
