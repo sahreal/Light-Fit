@@ -1,6 +1,7 @@
 const models = require("../models/index.js");
 const axios = require("axios");
 const { WebClient } = require("@slack/web-api");
+const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 const messageScheduler = require("../helpers/messageScheduler.js");
 
 module.exports = {
@@ -36,7 +37,7 @@ module.exports = {
         resp.data.tz = userTZ.user.tz;
         models.oauth(resp.data);
         // schedule messages
-        messageScheduler(token, addedChannel, resp.data.tz);
+        messageScheduler(token, addedChannel, resp.data.tz, resp.data.team.id);
       }
 
       (async () => {
@@ -50,10 +51,26 @@ module.exports = {
       })();
 
       //TODO: A page to send the user to after they installed the bot
-      res.send({ message: "Hello World", resp: resp.data });
+      res.status(201).send({ message: "Hello World", resp: resp.data });
     } catch (err) {
-      console.log(`ERROR: ${err}`);
-      res.send({ err: err });
+      console.error(`ERROR: ${err}`);
+      res.status(500).send({ err: err });
     }
+  },
+  remove: async (req, res) => {
+    const workspaceId = req.body.team_id;
+    const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
+
+    // Removes the job from the DB
+    await models.removeWorkspace(workspaceId);
+
+    // iterate through the jobs and cancels each job
+    await jobs.forEach((job) => {
+      job.stop();
+    });
+
+    delete jobs;
+
+    res.sendStatus(204);
   },
 };

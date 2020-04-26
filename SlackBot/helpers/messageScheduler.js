@@ -1,8 +1,9 @@
 const cron = require("cron");
 const { WebClient } = require("@slack/web-api");
 const { Morning, Afternoon, MidDay, Evening } = require("../db/index");
+const cronMonitor = require("./cronMonitor.js");
 
-const messageScheduler = async (token, channel, timezone) => {
+const messageScheduler = async (token, channel, timezone, workspace) => {
   // initialize a bot client
   const bot = new WebClient(token);
 
@@ -25,7 +26,7 @@ const messageScheduler = async (token, channel, timezone) => {
       .then((data) => {
         bot.chat.postMessage({
           channel: channel,
-          text: data.Prompt, //Will be a function call to the db for a message
+          text: data.Prompt,
         });
       })
       .catch((err) => console.error("Error Received in scheduled post: ", err));
@@ -37,6 +38,10 @@ const messageScheduler = async (token, channel, timezone) => {
       const hour = scheduledTime[time];
       const jobTime = `0 00 ${hour} * * 0`;
       const job = new cron.CronJob(jobTime, getMessage, null, true, timezone);
+      // stores the job in the cronMonitor object for access
+      cronMonitor[workspace]
+        ? cronMonitor[workspace].push(job)
+        : (cronMonitor[workspace] = [job]);
       job.start();
     };
     scheduleJob();

@@ -6,7 +6,7 @@ module.exports = {
     try {
       const data = await models.getAllWorkspaces();
       data.forEach((workspace) => {
-        workspace = workspace.toJSON();
+        workspace = workspace.toJSON(); // converts the workspace data to a JSON object we can manipulate
         let bytes = CryptoJS.AES.decrypt(
           workspace.token,
           process.env.SECRET_KEY
@@ -15,7 +15,8 @@ module.exports = {
         messageScheduler(
           workspace.token,
           workspace.channel,
-          workspace.timezone
+          workspace.timezone,
+          workspace.workspace_id
         );
       });
     } catch (err) {

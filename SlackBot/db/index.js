@@ -13,18 +13,16 @@ db.once("open", () => {
   console.log("Connected to db...");
 });
 
-const WorkspaceDataSchema = mongoose.Schema({
-  workspace: {
-    workspace_id: String,
-    token: String,
-    channel: String,
-    channel_name: String,
-    authed_user: String,
-    timezone: String,
-  },
+const WorkspaceDataSchema = new mongoose.Schema({
+  workspace_id: String,
+  token: String,
+  channel: String,
+  channel_name: String,
+  authed_user: String,
+  timezone: String,
 });
 
-const TokenCountSchema = mongoose.Schema({
+const TokenCountSchema = new mongoose.Schema({
   count: Number,
 });
 

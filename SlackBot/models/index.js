@@ -43,8 +43,10 @@ module.exports = {
     }
   },
   getAllWorkspaces: async () => {
-    // Decrypts all the workspace tokens from the database. This will be used for message rescheduling
     const data = await WorkspaceData.find();
     return data;
+  },
+  removeWorkspace: async (workspaceId) => {
+    return await WorkspaceData.findOneAndDelete({ workspace_id: workspaceId });
   },
 };
