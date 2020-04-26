@@ -11,25 +11,30 @@ const messageScheduler = async (token, channel, timezone) => {
   const bot = new WebClient(token.token);
 
   const scheduledTime = {
-    Morning: 9,
-    Midday: 12,
-    Afternoon: 15,
-    Evening: 18
+    Morning: { time: 07, collection: Morning },
+    Midday: { time: 11, collection: MidDay },
+    Afternoon: { time: 15, collection: Afternoon },
+    Evening: { time: 18, collection: Evening }
   };
 
-  const getMessage = time => {
-    const timeOfDay = {
-      Morning: Morning,
-      MidDay: MidDay,
-      Afternoon: Afternoon,
-      Evening: Evening
-    };
+  const getMessage = () => {
+    var today = new Date();
+    var currentHour = today.getHours();
 
-    return Afternoon.findOne()
+    let currentCollection;
+    for (let item in scheduledTime) {
+      if (scheduledTime[item].time === currentHour) {
+        currentCollection = scheduledTime[item].collection;
+      }
+    }
+
+    return currentCollection
+      .find()
       .then(data => {
+        let index = Math.floor(Math.random() * (data.length - 1) + 1);
         bot.chat.postMessage({
           channel: channel,
-          text: data.Prompt //Will be a function call to the db for a message
+          text: data[index].Prompt //Will be a function call to the db for a message
         });
       })
       .catch(err => console.log("FUCKIN ERROR"));
@@ -38,8 +43,9 @@ const messageScheduler = async (token, channel, timezone) => {
   for (const time in scheduledTime) {
     // uses cron to schedule a job to run at the each time defined in the scheduledTime object
     const scheduleJob = () => {
-      const hour = scheduledTime[time];
-      const jobTime = `10 40 ${hour} * * 6`;
+      const hour = scheduledTime[time].time;
+      var min = Math.floor(Math.random() * 59 + 1);
+      const jobTime = `0 ${min} ${hour} * * 0-6`;
       const job = new cron.CronJob(jobTime, getMessage, null, true, timezone);
       job.start();
     };
