@@ -1,8 +1,8 @@
 const models = require("../models/index.js");
 const axios = require("axios");
 const { WebClient } = require("@slack/web-api");
-const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 const messageScheduler = require("../helpers/messageScheduler.js");
+const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
@@ -65,9 +65,9 @@ module.exports = {
     await models.removeWorkspace(workspaceId);
 
     // iterate through the jobs and cancels each job
-    await jobs.forEach((job) => {
-      job.stop();
-    });
+    for (let job in jobs) {
+      jobs[job].stop();
+    }
 
     delete jobs;
 
