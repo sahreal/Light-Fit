@@ -3,48 +3,48 @@ const { WorkspaceData, TokenCount } = require("../db/index.js");
 
 module.exports = {
   //Adds tokens and relevant workspace information to the database
-  oauth: (workspace) => {
+  oauth: async (workspace) => {
+    // encrypt tokens
     const ciphertext = CryptoJS.AES.encrypt(
       workspace.access_token,
       process.env.SECRET_KEY
     ).toString();
 
     const workspaceData = {
-      workspace_id: workspace.team.id,
-      token: ciphertext,
-      channel: workspace.incoming_webhook.channel_id,
-      channel_name: workspace.incoming_webhook.channel,
-      authed_user: workspace.authed_user.id,
+      $setOnInsert: {
+        workspace_id: workspace.team.id,
+        token: ciphertext,
+        channel: workspace.incoming_webhook.channel_id,
+        channel_name: workspace.incoming_webhook.channel,
+        authed_user: workspace.authed_user.id,
+        timezone: workspace.tz,
+      },
     };
 
-    console.log(workspaceData);
-
-    const insertToken = WorkspaceData.insertMany([workspaceData]);
-    const updateCount = TokenCount.updateOne(
-      {},
-      { $inc: { count: 1 } },
-      (err, count) => {
-        if (err) {
-          console.log(err);
-        }
-      }
-    );
-  },
-  decrypt: async () => {
-    // Decrypts all the workspace tokens from the database. This will be used for message rescheduling
     try {
-      const workspaceData = await db.workspace.WorkspaceData.find();
-      workspaceData.forEach((workspace) => {
-        const bytes = CryptoJS.AES.decrypt(
-          workspace.token,
-          process.env.SECRET_KEY
+      // insert the workspace into the db only if it has not already been added
+      const insertToken = await WorkspaceData.collection.findOneAndUpdate(
+        { workspace_id: workspace.team.id },
+        workspaceData,
+        {
+          upsert: true,
+        }
+      );
+      // if the inserted token gets inserted update the count collection
+      if (!!!insertToken.value) {
+        const updateCount = TokenCount.collection.updateOne(
+          {},
+          { $inc: { count: 1 } },
+          { upsert: true }
         );
-        workspace.token = bytes.toString(CryptoJS.enc.Utf8);
-      });
-
-      return workspaceData;
+      }
     } catch (err) {
-      console.log(`ERROR: ${err}`);
+      console.log(err);
     }
+  },
+  getAllWorkspaces: async () => {
+    // Decrypts all the workspace tokens from the database. This will be used for message rescheduling
+    const data = await WorkspaceData.find();
+    return data;
   },
 };

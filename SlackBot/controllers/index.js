@@ -24,43 +24,36 @@ module.exports = {
       addedChannel = await resp.data.incoming_webhook.channel;
       userId = await resp.data.authed_user.id;
 
+      let bot;
       if (token) {
-        // If a token is received add it to the DB
+        // If a token is received get the user's timezone info
+        // Add it to the workspace object and send the object to the DB
+        bot = new WebClient(token);
+        const userTZ = await bot.users.info({
+          token: token,
+          user: userId,
+        });
+        resp.data.tz = userTZ.user.tz;
         models.oauth(resp.data);
         // schedule messages
-        messageScheduler(token, addedChannel, "America/New_York");
+        messageScheduler(token, addedChannel, resp.data.tz);
       }
 
       (async () => {
         // send the user a welcome message whenever a user installs the slack app to their workspace
         // Use the access token and user id from the auth response
-        const bot = new WebClient(token);
-
         const post = await bot.chat.postMessage({
           channel: userId,
           text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
           as_user: "self",
         });
       })();
+
+      //TODO: A page to send the user to after they installed the bot
+      res.send({ message: "Hello World", resp: resp.data });
     } catch (err) {
       console.log(`ERROR: ${err}`);
+      res.send({ err: err });
     }
-
-    (async () => {
-      // send the user a welcome message whenever a user installs the slack app to their workspace
-      // Use the access token and user id from the auth response
-      const bot = new WebClient(token);
-
-      const post = await bot.chat.postMessage({
-        channel: userId,
-        text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-        as_user: "self",
-      });
-    })();
-
-    // schedule messages
-    messageScheduler(token, addedChannel, "America/New_York");
-
-    res.send({ message: "Hello World", resp: resp.data });
   },
 };

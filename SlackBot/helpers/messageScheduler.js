@@ -1,14 +1,10 @@
 const cron = require("cron");
 const { WebClient } = require("@slack/web-api");
-
 const { Morning, Afternoon, MidDay, Evening } = require("../db/index");
-const mongoose = require("mongoose");
-const uri = require("../token/DbKey").mongoURI;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const messageScheduler = async (token, channel, timezone) => {
   // initialize a bot client
-  const bot = new WebClient(token.token);
+  const bot = new WebClient(token);
 
   const scheduledTime = {
     Morning: 9,
@@ -32,14 +28,14 @@ const messageScheduler = async (token, channel, timezone) => {
           text: data.Prompt, //Will be a function call to the db for a message
         });
       })
-      .catch((err) => console.log("FUCKIN ERROR"));
+      .catch((err) => console.error("Error Received in scheduled post: ", err));
   };
 
   for (const time in scheduledTime) {
     // uses cron to schedule a job to run at the each time defined in the scheduledTime object
     const scheduleJob = () => {
       const hour = scheduledTime[time];
-      const jobTime = `10 40 ${hour} * * 6`;
+      const jobTime = `0 00 ${hour} * * 0`;
       const job = new cron.CronJob(jobTime, getMessage, null, true, timezone);
       job.start();
     };

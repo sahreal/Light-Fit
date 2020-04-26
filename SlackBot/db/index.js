@@ -20,6 +20,7 @@ const WorkspaceDataSchema = mongoose.Schema({
     channel: String,
     channel_name: String,
     authed_user: String,
+    timezone: String,
   },
 });
 
@@ -27,43 +28,50 @@ const TokenCountSchema = mongoose.Schema({
   count: Number,
 });
 
-const Morning = new mongoose.Schema(
+const MorningSchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Morning" }
 );
 
-const MidDay = new mongoose.Schema(
+const MidDaySchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Mid-day" }
 );
 
-const Afternoon = new mongoose.Schema(
+const AfternoonSchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Afternoon" }
 );
 
-const Evening = new mongoose.Schema(
+const EveningSchema = new mongoose.Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
   },
   { collection: "Evening" }
 );
 
 const WorkspaceData = mongoose.model("Workspaces", WorkspaceDataSchema);
 const TokenCount = mongoose.model("TokenCounts", TokenCountSchema);
-const Morning = mongoose.model("Morning", Morning);
-const MidDay = mongoose.model("MidDay", MidDay);
-const Afternoon = mongoose.model("Afternoon", Afternoon);
-const Evening = mongoose.model("Evening", Evening);
+const Morning = mongoose.model("Morning", MorningSchema);
+const MidDay = mongoose.model("MidDay", MidDaySchema);
+const Afternoon = mongoose.model("Afternoon", AfternoonSchema);
+const Evening = mongoose.model("Evening", EveningSchema);
 
-module.exports = { WorkspaceData, TokenCount,Morning,MidDay,Afternoon,Evening };
+module.exports = {
+  WorkspaceData,
+  TokenCount,
+  Morning,
+  MidDay,
+  Afternoon,
+  Evening,
+};
