@@ -63,7 +63,12 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
       // schedules the initial cron job
       const job = new cron.CronJob(jobTime, onTick, onComplete, true, timezone);
       // stores the job in the cronMonitor object for access
-      cronMonitor[workspace][time] = job;
+      if (cronMonitor[workspace]) {
+        cronMonitor[workspace][time] = job;
+      } else {
+        cronMonitor[workspace] = {};
+        cronMonitor[workspace][time] = job;
+      }
       job.start();
     };
     scheduleJob();
