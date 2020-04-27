@@ -6,7 +6,7 @@ const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
-    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://light-fit.herokuapp.com/app-slack-oauth`;
+    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://3.12.77.168:443/app-slack-oauth`;
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
 
     let resp, token, addedChannel, userId;
@@ -14,7 +14,7 @@ module.exports = {
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers,
+        headers
       });
 
       if (resp.ok === false) {
@@ -32,7 +32,7 @@ module.exports = {
         bot = new WebClient(token);
         const userTZ = await bot.users.info({
           token: token,
-          user: userId,
+          user: userId
         });
         resp.data.tz = userTZ.user.tz;
         models.oauth(resp.data);
@@ -45,16 +45,15 @@ module.exports = {
         // Use the access token and user id from the auth response
         const post = await bot.chat.postMessage({
           channel: userId,
-          text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-          as_user: "self",
+          text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
+          as_user: "self"
         });
       })();
 
       //TODO: A page to send the user to after they installed the bot
-      res.status(201).send({ message: "Hello World", resp: resp.data });
+      res.redirect(301, "https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
     } catch (err) {
       console.error(`ERROR: ${err}`);
-      res.status(500).send({ err: err });
     }
   },
   remove: async (req, res) => {
@@ -72,5 +71,5 @@ module.exports = {
     delete jobs;
 
     res.sendStatus(204);
-  },
+  }
 };
