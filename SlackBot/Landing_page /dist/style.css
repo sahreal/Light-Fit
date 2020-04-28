@@ -1,0 +1,83 @@
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background-size: cover;
+}
+
+body {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    324deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(236, 156, 191, 1) 0%,
+    rgba(136, 7, 199, 1) 100%
+  );
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background: rgba(63, 12, 88, 0.65);
+  color: whitesmoke;
+  font-size: 20px;
+}
+
+.header-text {
+  display: flex;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.header p {
+  padding: 0px 30px 0px 0px;
+  margin: 40px 5px 5px 0px;
+}
+
+.header img {
+  position: absolute;
+  top: -20px;
+  left: 30px;
+  height: 30%;
+}
+.header-text a .privacy {
+  padding: 0px 10px 0px 0px !important;
+  color: whitesmoke;
+}
+
+.header-text a {
+  padding: 0px 30px 0px 0px;
+  margin: 40px 5px 5px 0px;
+  color: whitesmoke;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+a img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 75px;
+  box-shadow: 5px 5px 6px 0px rgba(136, 7, 199, 1);
+}
+
+.words span {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.words p {
+  color: whitesmoke;
+  /* margin: 0px 300px 0px 300px;
+  padding: 0px 0px 20px 0px; */
+}
+
+.title {
+  color: whitesmoke;
+}
