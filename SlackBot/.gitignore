@@ -2,10 +2,6 @@ package-lock.json
 /node_modules
 /token/
 .env
-<<<<<<< Updated upstream
 data/certbot
 *.pem
 init-letsencrypt.sh
-=======
-SDC_Greenfield_Ubuntu.pem
->>>>>>> Stashed changes

@@ -6,11 +6,7 @@ const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
-<<<<<<< Updated upstream
-    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=http://3.12.77.168:443/app-slack-oauth`;
-=======
     const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=http://3.23.63.31:443/app-slack-oauth`;
->>>>>>> Stashed changes
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
     console.log("Happened");
     let resp, token, addedChannel, userId;
