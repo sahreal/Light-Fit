@@ -2,5 +2,6 @@ package-lock.json
 /node_modules
 /token/
 .env
-cert.pem
-key.pem
+data/certbot
+*.pem
+init-letsencrypt.sh

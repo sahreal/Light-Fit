@@ -6,15 +6,19 @@ const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
+<<<<<<< Updated upstream
     const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=http://3.12.77.168:443/app-slack-oauth`;
+=======
+    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=http://3.23.63.31:443/app-slack-oauth`;
+>>>>>>> Stashed changes
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-
+    console.log("Happened");
     let resp, token, addedChannel, userId;
 
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers
+        headers,
       });
 
       if (resp.ok === false) {
@@ -32,7 +36,7 @@ module.exports = {
         bot = new WebClient(token);
         const userTZ = await bot.users.info({
           token: token,
-          user: userId
+          user: userId,
         });
         resp.data.tz = userTZ.user.tz;
         models.oauth(resp.data);
@@ -46,7 +50,7 @@ module.exports = {
         const post = await bot.chat.postMessage({
           channel: userId,
           text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-          as_user: "self"
+          as_user: "self",
         });
       })();
 
@@ -73,5 +77,5 @@ module.exports = {
     delete jobs;
 
     res.sendStatus(204);
-  }
+  },
 };
