@@ -6,7 +6,7 @@ const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
-    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://fakebot.xyz/app-slack-oauth`;
+    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://fakebot.xyz:443/app-slack-oauth`;
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
     console.log("Happened");
     let resp, token, addedChannel, userId;
@@ -60,8 +60,8 @@ module.exports = {
   },
   remove: async (req, res) => {
     //Handle slack initial verification
-    if (req.body.data.challenge) {
-      res.status(200).send({ challenge: req.body.data.challenge });
+    if (req.body.challenge) {
+      res.status(200).send({ challenge: req.body.challenge });
     }
 
     const workspaceId = req.body.team_id;

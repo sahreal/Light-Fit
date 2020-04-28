@@ -8,10 +8,10 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
   const bot = new WebClient(token);
 
   const scheduledTime = {
-    Morning: { time: 7, collection: Morning },
-    Midday: { time: 8, collection: MidDay },
-    Afternoon: { time: 9, collection: Afternoon },
-    Evening: { time: 10, collection: Evening },
+    Morning: { time: 9, collection: Morning },
+    Midday: { time: 12, collection: MidDay },
+    Afternoon: { time: 15, collection: Afternoon },
+    Evening: { time: 17, collection: Evening },
   };
 
   const getMessage = (timePeriod) => {
@@ -34,7 +34,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
     const scheduleJob = () => {
       const hour = scheduledTime[time].time;
       const min = Math.floor(Math.random() * 59 + 1);
-      const jobTime = `0 30 ${hour} * * 1-5`;
+      const jobTime = `0 ${min} ${hour} * * 1-5`;
       const onTick = () => {
         getMessage(time);
         job.stop();
@@ -49,7 +49,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
         } else {
           day++;
         }
-        const jobTime = `0 34 ${hour} * * ${day}`;
+        const jobTime = `0 ${min} ${hour} * * ${day}`;
         let newJob = new cron.CronJob(
           jobTime,
           onTick,
