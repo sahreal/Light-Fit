@@ -16,7 +16,7 @@ app.use("/", routes);
 // On server start up have the system reschedule all messages
 reschedule.rescheduleMessages();
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
   console.log(`SlackBot is running locally http://localhost:${port}`)
