@@ -3,7 +3,7 @@ const { WorkspaceData, TokenCount } = require("../db/index.js");
 
 module.exports = {
   //Adds tokens and relevant workspace information to the database
-  oauth: async (workspace) => {
+  oauth: async workspace => {
     // encrypt tokens
     const ciphertext = CryptoJS.AES.encrypt(
       workspace.access_token,
@@ -17,17 +17,17 @@ module.exports = {
         channel: workspace.incoming_webhook.channel_id,
         channel_name: workspace.incoming_webhook.channel,
         authed_user: workspace.authed_user.id,
-        timezone: workspace.tz,
-      },
+        timezone: workspace.tz
+      }
     };
 
     try {
       // insert the workspace into the db only if it has not already been added
       const insertToken = await WorkspaceData.collection.findOneAndUpdate(
-        { workspace_id: workspace.team.id },
+        { channel: workspace.incoming_webhook.channel_id },
         workspaceData,
         {
-          upsert: true,
+          upsert: true
         }
       );
       // if the inserted token gets inserted update the count collection
@@ -46,7 +46,7 @@ module.exports = {
     const data = await WorkspaceData.find();
     return data;
   },
-  removeWorkspace: async (workspaceId) => {
+  removeWorkspace: async workspaceId => {
     return await WorkspaceData.findOneAndDelete({ workspace_id: workspaceId });
-  },
+  }
 };

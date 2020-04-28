@@ -3,3 +3,4 @@ package-lock.json
 .gitignore
 .dockerignore
 Dockerfile
+/sslCertificate

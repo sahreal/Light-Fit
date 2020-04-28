@@ -34,7 +34,8 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
     const scheduleJob = () => {
       const hour = scheduledTime[time].time;
       const min = Math.floor(Math.random() * 59 + 1);
-      const jobTime = `0 ${min} ${hour} * * 1-5`;
+      const jobTime = `0 13 ${hour} * * 1-5`;
+      //const jobTime = `0 ${min} ${hour} * * 1-5`;
       const onTick = () => {
         getMessage(time);
         job.stop();
