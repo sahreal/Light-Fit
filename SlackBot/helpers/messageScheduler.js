@@ -8,25 +8,25 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
   const bot = new WebClient(token);
 
   const scheduledTime = {
-    Morning: { time: 9, collection: Morning },
+    Morning: { time: 4, collection: Morning },
     Midday: { time: 12, collection: MidDay },
     Afternoon: { time: 15, collection: Afternoon },
-    Evening: { time: 17, collection: Evening }
+    Evening: { time: 17, collection: Evening },
   };
 
-  const getMessage = timePeriod => {
+  const getMessage = (timePeriod) => {
     let currentCollection = scheduledTime[timePeriod].collection;
 
     return currentCollection
       .find()
-      .then(data => {
+      .then((data) => {
         let index = Math.floor(Math.random() * (data.length - 1) + 1);
         bot.chat.postMessage({
           channel: channel,
-          text: data[index].Prompt //Will be a function call to the db for a message
+          text: data[index].Prompt, //Will be a function call to the db for a message
         });
       })
-      .catch(err => console.error("Error Received in scheduled post: ", err));
+      .catch((err) => console.error("Error Received in scheduled post: ", err));
   };
 
   for (const time in scheduledTime) {
@@ -34,8 +34,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
     const scheduleJob = () => {
       const hour = scheduledTime[time].time;
       const min = Math.floor(Math.random() * 59 + 1);
-      const jobTime = `0 13 ${hour} * * 1-5`;
-      //const jobTime = `0 ${min} ${hour} * * 1-5`;
+      const jobTime = `0 ${min} ${hour} * * 1-5`;
       const onTick = () => {
         getMessage(time);
         job.stop();
@@ -59,6 +58,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
           timezone
         );
         cronMonitor[workspace][time] = newJob;
+        console.log("NEW CRON JOBS", cronMonitor);
         return newJob;
       };
       // schedules the initial cron job
@@ -74,6 +74,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
     };
     scheduleJob();
   }
+  console.log("INITIAL JOBS", cronMonitor);
 };
 
 module.exports = messageScheduler;
