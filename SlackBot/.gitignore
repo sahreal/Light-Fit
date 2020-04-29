@@ -2,9 +2,6 @@ package-lock.json
 /node_modules
 /token/
 .env
-<<<<<<< HEAD
-=======
 data/certbot
 *.pem
 init-letsencrypt.sh
->>>>>>> master

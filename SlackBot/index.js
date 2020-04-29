@@ -8,18 +8,6 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const routes = require("./routes/index.js");
 const reschedule = require("./helpers/messageRescheduler.js");
-<<<<<<< HEAD
-const https = require("https");
-var http = require("http");
-const fs = require("fs");
-var forceSsl = require("express-force-ssl");
-
-const options = {
-  key: fs.readFileSync("./ssl/key.pem"),
-  cert: fs.readFileSync("./ssl/cert.pem")
-};
-=======
->>>>>>> master
 
 console.log(options, "options");
 
@@ -32,13 +20,6 @@ reschedule.rescheduleMessages();
 
 const port = process.env.PORT || 3000;
 
-<<<<<<< HEAD
-// https
-//   .createServer(options, app)
-//   .listen(443, () => console.log("SlackBot is on https"));
-http.createServer(app).listen(80, () => console.log("Slackbot is on http"));
-=======
->>>>>>> master
 app.listen(port, () =>
   console.log(`SlackBot is running locally http://localhost:${port}`)
 );
