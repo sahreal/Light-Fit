@@ -13,10 +13,12 @@ var http = require("http");
 const fs = require("fs");
 var forceSsl = require("express-force-ssl");
 
-// const options = {
-//   key: fs.readFileSync("./sslCertificate/key.pem"),
-//   cert: fs.readFileSync("./sslCertificate/cert.pem")
-// };
+const options = {
+  key: fs.readFileSync("./ssl/key.pem"),
+  cert: fs.readFileSync("./ssl/cert.pem")
+};
+
+console.log(options, "options");
 
 app.use(express.static(path.join(__dirname, "./Landing_page /dist/")));
 app.use(bodyParser.json());
