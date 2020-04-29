@@ -72,7 +72,7 @@ a img {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 75px;
+  margin-top: 5px;
   box-shadow: 5px 5px 6px 0px rgba(136, 7, 199, 1);
 }
 
@@ -90,5 +90,11 @@ a img {
 }
 
 .title {
+  color: whitesmoke;
+}
+
+.list {
+  display: flex;
+  justify-content: center;
   color: whitesmoke;
 }
