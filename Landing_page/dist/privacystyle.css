@@ -3,18 +3,25 @@ html {
   width: 100%;
   margin: 0;
   background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-repeat: no-repeat;
 }
 
 body {
+  height: 100%;
   background: rgb(255, 255, 255);
   background: linear-gradient(
-    324deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(236, 156, 191, 1) 0%,
-    rgba(136, 7, 199, 1) 100%
-  );
+      324deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(236, 156, 191, 1) 0%,
+      rgba(136, 7, 199, 1) 100%
+    )
+    fixed;
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .header {
@@ -62,20 +69,21 @@ a img {
   margin-left: auto;
   margin-right: auto;
   margin-top: 75px;
-  box-shadow: 5px 5px 6px 0px rgba(136, 7, 199, 1);
+  box-shadow: 5px 5px 6px 0px;
 }
 
 .words span {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 200px;
   width: 50%;
 }
 
 .words p {
   color: whitesmoke;
   /* margin: 0px 300px 0px 300px;
-  padding: 0px 0px 20px 0px; */
+    padding: 0px 0px 20px 0px; */
 }
 
 .title {

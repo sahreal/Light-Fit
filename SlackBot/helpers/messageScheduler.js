@@ -8,7 +8,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
   const bot = new WebClient(token);
 
   const scheduledTime = {
-    Morning: 20,
+    Morning: 9,
     Midday: 12,
     Afternoon: 15,
     Evening: 17,

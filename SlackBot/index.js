@@ -4,11 +4,13 @@
 const db = require("./db/index.js");
 const express = require("express");
 const app = express();
+const path = require("path");
 const bodyParser = require("body-parser");
 const routes = require("./routes/index.js");
 const reschedule = require("./helpers/messageRescheduler.js");
 const dailyMessage = require("./helpers/getUnsentMessage.js");
 
+app.use(express.static(path.join(__dirname, "./Landing_page /dist/")));
 app.use(bodyParser.json());
 app.use("/", routes);
 
@@ -19,5 +21,5 @@ reschedule.rescheduleMessages();
 const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`SlackBot is running locally http://localhost:${port}`)
 );

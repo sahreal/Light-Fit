@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"SlackApp.tokencounts"}],"uuid":"0d745882125c44e8946992233e03b704"}
