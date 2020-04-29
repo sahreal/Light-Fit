@@ -5,5 +5,5 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN npm install
 
-EXPOSE 8000
+EXPOSE 8080
 CMD ["npm", "start"]
