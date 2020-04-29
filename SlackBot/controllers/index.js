@@ -6,9 +6,14 @@ const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
-    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://light-fit.herokuapp.com/app-slack-oauth`;
+    // Handles user cancelling request to add the bot
+    if (req.query.error) {
+      res
+        .status(301)
+        .redirect("https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
+    }
+    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://fakebot.xyz:443/app-slack-oauth`;
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-
     let resp, token, addedChannel, userId;
 
     try {
@@ -38,20 +43,21 @@ module.exports = {
         models.oauth(resp.data);
         // schedule messages
         messageScheduler(token, addedChannel, resp.data.tz, resp.data.team.id);
+
+        (async () => {
+          // send the user a welcome message whenever a user installs the slack app to their workspace
+          // Use the access token and user id from the auth response
+          const post = await bot.chat.postMessage({
+            channel: userId,
+            text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
+            as_user: "self",
+          });
+        })();
       }
 
-      (async () => {
-        // send the user a welcome message whenever a user installs the slack app to their workspace
-        // Use the access token and user id from the auth response
-        const post = await bot.chat.postMessage({
-          channel: userId,
-          text: `Hey I am coolBot. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-          as_user: "self",
-        });
-      })();
-
-      //TODO: A page to send the user to after they installed the bot
-      res.status(201).send({ message: "Hello World", resp: resp.data });
+      res
+        .status(301)
+        .redirect("https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
     } catch (err) {
       console.error(`ERROR: ${err}`);
       res.status(500).send({ err: err });
