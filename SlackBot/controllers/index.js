@@ -8,7 +8,6 @@ module.exports = {
   appOauth: async (req, res) => {
     const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://lightandfitworkingwell.app:443/app-slack-oauth`;
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-    console.log("Happened");
     let resp, token, addedChannel, userId;
 
     try {
@@ -50,9 +49,8 @@ module.exports = {
         });
       })();
 
-      //TODO: A page to send the user to after they installed the bot
       res
-        .status(301)
+        .status(302)
         .redirect("https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
     } catch (err) {
       console.error(`ERROR: ${err}`);
