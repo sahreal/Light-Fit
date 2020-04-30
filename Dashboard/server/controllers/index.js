@@ -32,7 +32,12 @@ module.exports = {
     },
     postOne: async (req, res) => {
       let time = req.body.timeOfDay;
-      let result = { Prompt: req.body.input, Time: time };
+      let result = {
+        Prompt: req.body.input,
+        Time: time,
+        Sent: false,
+        LastSent: null,
+      };
       try {
         await timeOfDay[time].collection.insertOne(result);
         res.sendStatus(200);
@@ -47,6 +52,8 @@ module.exports = {
         {
           Prompt: request.Prompt,
           Time: request.Time,
+          Sent: false,
+          LastSent: null,
         },
         async (err, result) => {
           try {
