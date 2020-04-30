@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import List from "./Components/List";
 import Form from "./Components/Form";
-import { password } from "../config/password";
 import { thistle } from "color-name";
 
 class App extends React.Component {
@@ -29,7 +28,6 @@ class App extends React.Component {
     this.inputChange = this.inputChange.bind(this);
     this.valueChange = this.valueChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.deleteHandler = this.deleteHandler.bind(this);
   }
 
   componentDidMount() {
@@ -79,9 +77,14 @@ class App extends React.Component {
 
   updateEntries(obj) {}
 
-  deleteEntries(message) {}
-
-  deleteHandler(prompt) {}
+  deleteEntries(obj) {
+    axios
+      .delete("/deleteOne", { data: obj })
+      .then(() => {
+        this.getEntries(obj.Time);
+      })
+      .catch(err => console.log(err));
+  }
 
   render() {
     return (
@@ -100,7 +103,6 @@ class App extends React.Component {
         <List
           list={this.state.MorningList}
           updateEntries={this.updateEntries}
-          deleteHandler={this.deleteHandler}
           deleteEntries={this.deleteEntries}
         />
         <p>MidDay</p>

@@ -63,8 +63,9 @@ module.exports = {
     },
     deleteOne: async (req, res) => {
       let result = req.body;
+      let time = req.body.Time;
       try {
-        await Afternoon.collection.deleteOne(result);
+        await timeOfDay[time].collection.deleteOne(result);
         res.sendStatus(200);
       } catch (err) {
         console.log(err, "delete promise error");
