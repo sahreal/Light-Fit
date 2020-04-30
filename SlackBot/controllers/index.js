@@ -6,12 +6,13 @@ const slackEvents = require("../helpers/slackEvents.js");
 
 module.exports = {
   appOauth: async (req, res) => {
-    // Handles user cancelling request to add the bot
+    // handles users canceling the app installation process
     if (req.query.error) {
-      res.status(302).redirect("https://lightandfitworkingwell.app/");
+      res.status(302).redirect("https://lightandfitworkingwell.app:443/");
       return;
     }
-    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://bd598e5e.ngrok.io:443/app-slack-oauth`;
+
+    const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://lightandfitworkingwell.app:443/app-slack-oauth`;
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
     let resp, token, addedChannel, userId;
 
@@ -91,6 +92,8 @@ module.exports = {
       res.sendStatus(204);
     }
 
+    /* TODO: App mention functionality. Possible use after initial authorization.
+    Needs Event scope permissions */
     //if (req.body.event.type === "app_mention") {
     // const workspaceDocument = {
     //   $setOnInsert: {

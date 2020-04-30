@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 mongoose
   .connect(process.env.MONGOURI, {
@@ -9,7 +9,7 @@ mongoose
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const Morning = new Schema(
   {
