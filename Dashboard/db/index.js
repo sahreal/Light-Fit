@@ -1,10 +1,4 @@
 var mongoose = require("mongoose");
-const db = require("../config/key.js");
-
-// mongoose
-//   .connect(db.mongoURI, { useNewUrlParser: true })
-//   .then(() => console.log("MongoDB successfully connected"))
-//   .catch(err => console.log(err));
 
 var Schema = mongoose.Schema;
 
@@ -40,7 +34,18 @@ const Evening = new Schema(
   { collection: "Evening" }
 );
 
+const tokenCounts = new Schema(
+  {
+    count: Number
+  },
+  { collection: "tokenCounts" }
+);
+
+//Time of day prompts collections
 module.exports.Morning = mongoose.model("Morning", Morning);
 module.exports.MidDay = mongoose.model("MidDay", MidDay);
 module.exports.Afternoon = mongoose.model("Afternoon", Afternoon);
 module.exports.Evening = mongoose.model("Evening", Evening);
+
+//Download count
+module.exports.tokenCounts = mongoose.model("tokenCounts", tokenCounts);

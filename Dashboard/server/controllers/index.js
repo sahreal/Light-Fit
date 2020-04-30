@@ -1,7 +1,12 @@
-const MongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
 const uri = require("../../config/key").mongoURI;
-const { Morning, Afternoon, MidDay, Evening } = require("../../db/index");
+const {
+  Morning,
+  Afternoon,
+  MidDay,
+  Evening,
+  tokenCounts
+} = require("../../db/index");
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const timeOfDay = {
@@ -31,7 +36,6 @@ module.exports = {
     postOne: async (req, res) => {
       let time = req.body.timeOfDay;
       let result = { Prompt: req.body.input, Time: time };
-      console.log(result, "RESULT");
       try {
         await timeOfDay[time].collection.insertOne(result);
         res.sendStatus(200);
@@ -41,7 +45,6 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
-      console.log(request);
       Afternoon.collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
         {
@@ -66,6 +69,7 @@ module.exports = {
       } catch (err) {
         console.log(err, "delete promise error");
       }
-    }
+    },
+    countTokens: (req, res) => {}
   }
 };

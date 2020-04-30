@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import List from "./Components/List";
 import Form from "./Components/Form";
+import { password } from "../config/password";
 import { thistle } from "color-name";
 
 class App extends React.Component {
@@ -63,13 +64,11 @@ class App extends React.Component {
 
   inputChange(event) {
     let value = event.target.value;
-    console.log(value, "TYPE TTYP");
     this.setState({ edit: value });
   }
 
   valueChange(event) {
     let value = event.target.value;
-    console.log(value, "enter Select");
     this.setState({ value: value });
   }
 
@@ -78,27 +77,11 @@ class App extends React.Component {
     this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
   }
 
-  updateEntries(obj) {
-    console.log(obj, "WHAT NOW");
-    // axios
-    //   .put("/update", obj)
-    //   .then(() => {
-    //     this.getEntries(obj.Time);
-    //   })
-    //   .catch(err => console.log(err));
-  }
+  updateEntries(obj) {}
 
-  deleteEntries(message) {
-    console.log(message, "WHAT IS THIS");
-    // axios
-    //   .delete("/todos", { data: { task: todo } })
-    //   .then(() => this.getTodos())
-    //   .catch(err => console.log(err));
-  }
+  deleteEntries(message) {}
 
-  deleteHandler(prompt) {
-    console.log(ref.current, " hhhh");
-  }
+  deleteHandler(prompt) {}
 
   render() {
     return (
