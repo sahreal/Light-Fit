@@ -1,34 +1,16 @@
-import React, { useState, useRef } from "react";
+import React from "react";
+import EditModal from "./EditModal";
+import DeleteModal from "./DeleteModal";
+import "../styles.css";
 
-const ListEntry = ({ prompt, time, deleteEntries }) => {
-  const valueRef = React.useRef(time);
-
-  const deleteH = e => {
-    let prompt = event.target.value;
-    let time = valueRef.current;
-
-    let obj = {
-      Prompt: prompt,
-      Time: time
-    };
-
-    deleteEntries(obj);
-  };
-
+const ListEntry = ({ prompt, time }) => {
   return (
     <div>
       <span>
-        {" "}
-        <strong>{valueRef.current}</strong>
-        --------
         {prompt}
+        ------
+        <strong>{time}</strong>
       </span>
-
-      <div>
-        <button value={prompt} onClick={deleteH}>
-          Delete
-        </button>
-      </div>
     </div>
   );
 };

@@ -34,6 +34,7 @@ module.exports = {
       });
     },
     postOne: async (req, res) => {
+      console.log(req.body, "BODY");
       let time = req.body.timeOfDay;
       let result = { Prompt: req.body.input, Time: time };
       try {
@@ -45,7 +46,9 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
-      Afternoon.collection.findOneAndReplace(
+      console.log(request, "request");
+      let time = req.body.Time;
+      timeOfDay[time].collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
         {
           Prompt: request.Prompt,
@@ -63,6 +66,7 @@ module.exports = {
     },
     deleteOne: async (req, res) => {
       let result = req.body;
+      console.log(result, "RESULT");
       let time = req.body.Time;
       try {
         await timeOfDay[time].collection.deleteOne(result);

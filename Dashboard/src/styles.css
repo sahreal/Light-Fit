@@ -2,3 +2,43 @@ h1 {
   color: white;
   background-color: black;
 }
+
+/*LIST ENTRY */
+
+.alert-modal {
+  background-color: white;
+  margin: 300px 300px 0px 300px;
+  padding: 21px;
+  text-align: center;
+  border-style: solid;
+  border-width: thin;
+}
+
+.buttons {
+  margin: 8px;
+}
+.modal-button {
+  background-color: lightgray;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.modal-button-confirm {
+  background-color: #1082c7;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
