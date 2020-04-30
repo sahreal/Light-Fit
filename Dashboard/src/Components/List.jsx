@@ -13,7 +13,6 @@ const List = ({ list, updateEntries, deleteEntries, deleteHandler }) => {
                 time={item.Time}
                 updateEntries={updateEntries}
                 deleteEntries={deleteEntries}
-                deleteHandler={deleteHandler}
               />
             );
           })
