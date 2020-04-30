@@ -28,7 +28,6 @@ class App extends React.Component {
     this.inputChange = this.inputChange.bind(this);
     this.valueChange = this.valueChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.deleteHandler = this.deleteHandler.bind(this);
   }
 
   componentDidMount() {
@@ -63,13 +62,11 @@ class App extends React.Component {
 
   inputChange(event) {
     let value = event.target.value;
-    console.log(value, "TYPE TTYP");
     this.setState({ edit: value });
   }
 
   valueChange(event) {
     let value = event.target.value;
-    console.log(value, "enter Select");
     this.setState({ value: value });
   }
 
@@ -78,26 +75,15 @@ class App extends React.Component {
     this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
   }
 
-  updateEntries(obj) {
-    console.log(obj, "WHAT NOW");
-    // axios
-    //   .put("/update", obj)
-    //   .then(() => {
-    //     this.getEntries(obj.Time);
-    //   })
-    //   .catch(err => console.log(err));
-  }
+  updateEntries(obj) {}
 
-  deleteEntries(message) {
-    console.log(message, "WHAT IS THIS");
-    // axios
-    //   .delete("/todos", { data: { task: todo } })
-    //   .then(() => this.getTodos())
-    //   .catch(err => console.log(err));
-  }
-
-  deleteHandler(prompt) {
-    console.log(ref.current, " hhhh");
+  deleteEntries(obj) {
+    axios
+      .delete("/deleteOne", { data: obj })
+      .then(() => {
+        this.getEntries(obj.Time);
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -117,7 +103,6 @@ class App extends React.Component {
         <List
           list={this.state.MorningList}
           updateEntries={this.updateEntries}
-          deleteHandler={this.deleteHandler}
           deleteEntries={this.deleteEntries}
         />
         <p>MidDay</p>
