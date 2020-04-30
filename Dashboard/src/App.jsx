@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import List from "./Components/List";
 import Form from "./Components/Form";
-import { password } from "../config/password";
 import { thistle } from "color-name";
 
 class App extends React.Component {
