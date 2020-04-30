@@ -1,11 +1,13 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const Morning = new Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Morning" }
 );
@@ -13,7 +15,9 @@ const Morning = new Schema(
 const MidDay = new Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Mid-day" }
 );
@@ -21,7 +25,9 @@ const MidDay = new Schema(
 const Afternoon = new Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Afternoon" }
 );
@@ -29,16 +35,18 @@ const Afternoon = new Schema(
 const Evening = new Schema(
   {
     Prompt: String,
-    Time: String
+    Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Evening" }
 );
 
 const tokenCounts = new Schema(
   {
-    count: Number
+    count: Number,
   },
-  { collection: "tokenCounts" }
+  { collection: "tokencounts" }
 );
 
 //Time of day prompts collections

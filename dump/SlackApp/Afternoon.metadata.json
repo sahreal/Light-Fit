@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"SlackApp.Afternoon"},{"v":{"$numberInt":"2"},"key":{"Prompt":{"$numberInt":"1"}},"name":"id","ns":"SlackApp.Afternoon","background":false}],"uuid":"d6aa495c7e4d44efbedec136bc6927e9"}

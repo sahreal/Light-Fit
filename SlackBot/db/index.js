@@ -23,6 +23,7 @@ db.once("open", () => {
 
 const WorkspaceDataSchema = new mongoose.Schema({
   workspace_id: String,
+  workspace_name: String,
   token: String,
   channel: String,
   channel_name: String,
@@ -38,6 +39,8 @@ const MorningSchema = new mongoose.Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Morning" }
 );
@@ -46,6 +49,8 @@ const MidDaySchema = new mongoose.Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Mid-day" }
 );
@@ -54,6 +59,8 @@ const AfternoonSchema = new mongoose.Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Afternoon" }
 );
@@ -62,6 +69,8 @@ const EveningSchema = new mongoose.Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Evening" }
 );
