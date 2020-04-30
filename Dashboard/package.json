@@ -9,13 +9,15 @@
   "scripts": {
     "clean": "rm dist/bundle.js",
     "seed": "node -r dotenv/config lib/seed.js",
-    "dev": "webpack -d --watch & nodemon server/index.js",
+    "dev": "webpack -d --watch & nodemon -r dotenv/config server/index.js",
     "build-dev": "webpack -d --mode development",
-    "start": "nodemon server/index.js",
+    "start": "node server/index.js",
     "build": "webpack -p --mode production"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",

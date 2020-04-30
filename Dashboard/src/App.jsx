@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import List from "./Components/List";
 import Form from "./Components/Form";
+import Counter from "./Components/Counter";
 import { thistle } from "color-name";
 
 class App extends React.Component {
@@ -13,10 +14,10 @@ class App extends React.Component {
       MidDayList: [],
       AfternoonList: [],
       EveningList: [],
-      TokenCount: [],
+      TokenCount: 0,
       string: "",
       edit: "",
-      value: ""
+      value: "",
     };
 
     //CRUD
@@ -24,11 +25,11 @@ class App extends React.Component {
     this.postEntries = this.postEntries.bind(this);
     this.updateEntries = this.updateEntries.bind(this);
     this.deleteEntries = this.deleteEntries.bind(this);
+    this.getCount = this.getCount.bind(this);
     //Input Handlers
     this.inputChange = this.inputChange.bind(this);
     this.valueChange = this.valueChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.deleteHandler = this.deleteHandler.bind(this);
   }
 
   componentDidMount() {
@@ -36,20 +37,21 @@ class App extends React.Component {
     this.getEntries("MidDay");
     this.getEntries("Evening");
     this.getEntries("Afternoon");
+    this.getCount();
   }
 
   getEntries(string) {
     return axios
       .get("/getAll", {
         params: {
-          timeOfDay: string
-        }
+          timeOfDay: string,
+        },
       })
-      .then(result => {
+      .then((result) => {
         let list = string + "List";
         this.setState({ [list]: result.data });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   postEntries(newMessage) {
@@ -58,18 +60,16 @@ class App extends React.Component {
       .then(() => {
         this.getEntries(this.state.value);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   inputChange(event) {
     let value = event.target.value;
-    console.log(value, "TYPE TTYP");
     this.setState({ edit: value });
   }
 
   valueChange(event) {
     let value = event.target.value;
-    console.log(value, "enter Select");
     this.setState({ value: value });
   }
 
@@ -78,33 +78,30 @@ class App extends React.Component {
     this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
   }
 
-  updateEntries(obj) {
-    console.log(obj, "WHAT NOW");
-    // axios
-    //   .put("/update", obj)
-    //   .then(() => {
-    //     this.getEntries(obj.Time);
-    //   })
-    //   .catch(err => console.log(err));
+  updateEntries(obj) {}
+
+  deleteEntries(obj) {
+    axios
+      .delete("/deleteOne", { data: obj })
+      .then(() => {
+        this.getEntries(obj.Time);
+      })
+      .catch((err) => console.log(err));
   }
 
-  deleteEntries(message) {
-    console.log(message, "WHAT IS THIS");
-    // axios
-    //   .delete("/todos", { data: { task: todo } })
-    //   .then(() => this.getTodos())
-    //   .catch(err => console.log(err));
-  }
-
-  deleteHandler(prompt) {
-    console.log(ref.current, " hhhh");
+  getCount() {
+    axios.get("/countTokens").then(({ data }) => {
+      this.setState({ TokenCount: data.count });
+    });
   }
 
   render() {
     return (
       <div>
         <h1>Wow What an Amazing Dashboard</h1>
-        <p>Download Ticker/Count Goes Here</p>
+        <div className="counterContainer">
+          <Counter counter={this.state.TokenCount} getCount={this.getCount} />
+        </div>
         <Form
           handleSubmit={this.handleSubmit}
           valueChange={this.valueChange}
@@ -113,11 +110,10 @@ class App extends React.Component {
           edit={this.state.edit}
         />
 
-        <p>Morning</p>
+        {/* <p>Morning</p>
         <List
           list={this.state.MorningList}
           updateEntries={this.updateEntries}
-          deleteHandler={this.deleteHandler}
           deleteEntries={this.deleteEntries}
         />
         <p>MidDay</p>
@@ -125,7 +121,7 @@ class App extends React.Component {
         <p>Afternoon</p>
         <List list={this.state.AfternoonList} />
         <p>Evening</p>
-        <List list={this.state.EveningList} />
+        <List list={this.state.EveningList} /> */}
       </div>
     );
   }

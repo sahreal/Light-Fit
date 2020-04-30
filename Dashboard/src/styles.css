@@ -2,3 +2,36 @@ h1 {
   color: white;
   background-color: black;
 }
+
+h2.downloadHeader {
+  margin: 0;
+}
+
+.counterNumber {
+  margin-left: 20px;
+  margin-right: 5px;
+  font-size: 24px;
+}
+span.refreshIcon {
+  align-self: center;
+}
+
+span svg.MuiSvgIcon-root {
+  font-size: 13px;
+  color: grey;
+}
+
+span svg.MuiSvgIcon-root:hover {
+  cursor: pointer;
+}
+
+.counterContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.downloadCounter {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+}

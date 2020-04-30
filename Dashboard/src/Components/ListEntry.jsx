@@ -1,8 +1,8 @@
 import React from "react";
-import "@babel/polyfill";
+// import "@babel/polyfill";
 
 const ListEntry = ({ prompt, time, deleteHandler }) => {
-  const deleteH = event => {
+  const deleteH = (event) => {
     console.log(event.target);
   };
 
@@ -10,7 +10,7 @@ const ListEntry = ({ prompt, time, deleteHandler }) => {
     <div>
       <span>
         {" "}
-        <strong>{time}</strong>
+        <strong>{valueRef.current}</strong>
         --------
         {prompt}
       </span>

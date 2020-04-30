@@ -8,7 +8,7 @@ module.exports = {
   appOauth: async (req, res) => {
     // Handles user cancelling request to add the bot
     if (req.query.error) {
-      res.status(301).redirect("https://lightandfitworkingwell.app/");
+      res.status(302).redirect("https://lightandfitworkingwell.app/");
       return;
     }
     const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://bd598e5e.ngrok.io:443/app-slack-oauth`;
@@ -72,10 +72,11 @@ module.exports = {
       }
 
       res
-        .status(301)
+        .status(302)
         .redirect("https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
     } catch (err) {
       console.error(`ERROR: ${err}`);
+      res.status(302).redirect("https://lightandfitworkingwell.app:443/");
     }
   },
   events: async (req, res) => {
