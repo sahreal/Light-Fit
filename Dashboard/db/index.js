@@ -6,6 +6,8 @@ const Morning = new Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Morning" }
 );
@@ -14,6 +16,8 @@ const MidDay = new Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Mid-day" }
 );
@@ -22,6 +26,8 @@ const Afternoon = new Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Afternoon" }
 );
@@ -30,6 +36,8 @@ const Evening = new Schema(
   {
     Prompt: String,
     Time: String,
+    Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Evening" }
 );
