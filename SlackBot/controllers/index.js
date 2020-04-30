@@ -6,6 +6,12 @@ const cronMonitor = require("../helpers/cronMonitor.js").monitor;
 
 module.exports = {
   appOauth: async (req, res) => {
+    // handles users canceling the app installation process
+    if (req.query.error) {
+      res.status(302).redirect("https://lightandfitworkingwell.app:443/");
+      return;
+    }
+
     const body = `code=${req.query.code}&client_id=${process.env.CLIENTID}&client_secret=${process.env.CLIENTSECRET}&redirect_uri=https://lightandfitworkingwell.app:443/app-slack-oauth`;
     const headers = { "Content-Type": "application/x-www-form-urlencoded" };
     let resp, token, addedChannel, userId;
@@ -16,8 +22,8 @@ module.exports = {
         headers,
       });
 
-      if (resp.ok === false) {
-        throw new Error(resp.error);
+      if (resp.data.ok === false) {
+        throw new Error(resp.data.error);
       }
 
       token = await resp.data.access_token;
@@ -54,6 +60,7 @@ module.exports = {
         .redirect("https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
     } catch (err) {
       console.error(`ERROR: ${err}`);
+      res.status(302).redirect("https://lightandfitworkingwell.app:443/");
     }
   },
   remove: async (req, res) => {
