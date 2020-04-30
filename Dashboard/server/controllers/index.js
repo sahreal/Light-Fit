@@ -1,3 +1,13 @@
+const mongoose = require("mongoose");
+const uri = require("../../config/key").mongoURI;
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch((err) => console.log(err));
 const {
   Morning,
   Afternoon,
