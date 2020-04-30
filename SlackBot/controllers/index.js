@@ -39,6 +39,7 @@ module.exports = {
           user: userId,
         });
 
+        // format of the document to insert into the database
         const workspaceDocument = {
           $setOnInsert: {
             workspace_id: resp.data.team.id,
@@ -80,7 +81,6 @@ module.exports = {
     }
   },
   events: async (req, res) => {
-    console.log(req.body);
     //Handle slack initial verification
     if (req.body.challenge) {
       res.status(200).send({ challenge: req.body.challenge });
@@ -91,21 +91,20 @@ module.exports = {
       res.sendStatus(204);
     }
 
-    if (req.body.event.type === "app_mention") {
-      console.log(req.body);
-      // const workspaceDocument = {
-      //   $setOnInsert: {
-      //     workspace_id: resp.body.team_id,
-      //     workspace_name: resp.data.team.name,
-      //     token: res.body.token,
-      //     channel: resp.body.event.channel,
-      //     channel_name: resp.data.incoming_webhook.channel,
-      //     authed_user: resp.data.authed_user.id,
-      //     timezone: userTZ.user.tz,
-      //   },
-      // };
+    //if (req.body.event.type === "app_mention") {
+    // const workspaceDocument = {
+    //   $setOnInsert: {
+    //     workspace_id: resp.body.team_id,
+    //     workspace_name: resp.data.team.name,
+    //     token: res.body.token,
+    //     channel: resp.body.event.channel,
+    //     channel_name: resp.data.incoming_webhook.channel,
+    //     authed_user: resp.data.authed_user.id,
+    //     timezone: userTZ.user.tz,
+    //   },
+    // };
 
-      // await slackEvents.addBot(workspaceDocument);
-    }
+    // await slackEvents.addBot(workspaceDocument);
+    //}
   },
 };

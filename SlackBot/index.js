@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, "./Landing_page /dist/")));
 app.use(bodyParser.json());
 app.use("/", routes);
 
-// On server start up have the system reschedule all messages
+// On server start up have the system reschedule all messages and set up the daily message and time scheduler
 dailyMessage.getUnsentMessages();
 reschedule.rescheduleMessages();
 

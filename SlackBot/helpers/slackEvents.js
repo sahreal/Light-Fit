@@ -5,7 +5,6 @@ module.exports = {
   remove: async (event) => {
     const workspaceId = event.team_id;
     const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
-    console.log(jobs);
     // Removes the job from the DB
     await models.removeWorkspace(workspaceId);
 
@@ -17,7 +16,9 @@ module.exports = {
     delete jobs;
     return;
   },
-  addBot: async (event) => {
-    await models.oauth();
-  },
+  // TODO: Possible implementation after first approval.
+  // Allows users to include the bot by mention. Incomplete implementation
+  // addBot: async (event) => {
+  //   await models.oauth();
+  // },
 };

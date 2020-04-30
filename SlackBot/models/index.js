@@ -11,7 +11,7 @@ module.exports = {
     ).toString();
 
     try {
-      // insert the workspace into the db only if it has not already been added
+      // insert the channel into the db only if it has not already been added
       const insertToken = await db.WorkspaceData.collection.findOneAndUpdate(
         { channel: workspace.$setOnInsert.channel },
         workspace,
@@ -21,11 +21,10 @@ module.exports = {
       );
       // if the inserted token gets inserted update the count collection
       if (!!!insertToken.value) {
-        const updateCount = db.TokenCount.collection.updateOne(
-          {},
-          { $inc: { count: 1 } },
-          { upsert: true }
+        const count = await db.WorkspaceData.collection.distinct(
+          "workspace_id"
         );
+        await db.TokenCount.collection.replaceOne({}, { count: count.length });
       }
     } catch (err) {
       console.log(err);
@@ -40,10 +39,10 @@ module.exports = {
   },
   getMessage: async (collectionName) => {
     try {
-      // Gets a message if the sent flag is set to false in DB
+      // Gets a message if the sent flag is set to false in DB and updates the flag and dates
       let message = await db[collectionName].findOneAndUpdate(
         { Sent: false },
-        { $set: { Sent: true } }
+        { $set: { Sent: true, LastSent: new Date().toJSON().slice(0, 10) } }
       );
 
       // Updates all flags to false if a message isn't found then grabs a message
@@ -51,7 +50,7 @@ module.exports = {
         await db[collectionName].updateMany({}, { $set: { Sent: false } });
         message = await db[collectionName].findOneAndUpdate(
           { Sent: false },
-          { $set: { Sent: true } }
+          { $set: { Sent: true, LastSent: new Date().toJSON().slice(0, 10) } }
         );
       }
       return message;

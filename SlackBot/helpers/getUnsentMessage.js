@@ -19,12 +19,13 @@ module.exports = {
       }
     };
     new cron.CronJob(
-      `0 33 20 * * 1-5`,
+      `0 0 6 * * 1-5`,
       getDailyMessage,
       null,
       true,
       "America/New_York"
     );
+    getDailyMessage();
   },
   dailyMessage: scheduledTime,
 };

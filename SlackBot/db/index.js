@@ -40,6 +40,7 @@ const MorningSchema = new mongoose.Schema(
     Prompt: String,
     Time: String,
     Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Morning" }
 );
@@ -49,6 +50,7 @@ const MidDaySchema = new mongoose.Schema(
     Prompt: String,
     Time: String,
     Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Mid-day" }
 );
@@ -58,6 +60,7 @@ const AfternoonSchema = new mongoose.Schema(
     Prompt: String,
     Time: String,
     Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Afternoon" }
 );
@@ -67,6 +70,7 @@ const EveningSchema = new mongoose.Schema(
     Prompt: String,
     Time: String,
     Sent: Boolean,
+    LastSent: String,
   },
   { collection: "Evening" }
 );
