@@ -1,6 +1,4 @@
 import React, { useState, useRef } from "react";
-import "@babel/polyfill";
-import { set } from "mongoose";
 
 const ListEntry = ({ prompt, time, deleteEntries }) => {
   const valueRef = React.useRef(time);
