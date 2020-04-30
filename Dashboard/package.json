@@ -9,9 +9,9 @@
   "scripts": {
     "clean": "rm dist/bundle.js",
     "seed": "node -r dotenv/config lib/seed.js",
-    "dev": "webpack -d --watch & nodemon server/index.js",
+    "dev": "webpack -d --watch & nodemon -r dotenv/config server/index.js",
     "build-dev": "webpack -d --mode development",
-    "start": "nodemon server/index.js",
+    "start": "node server/index.js",
     "build": "webpack -p --mode production"
   },
   "dependencies": {

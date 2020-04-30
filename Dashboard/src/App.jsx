@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import List from "./Components/List";
 import Form from "./Components/Form";
+import Counter from "./Components/Counter";
 import { thistle } from "color-name";
 
 class App extends React.Component {
@@ -13,7 +14,7 @@ class App extends React.Component {
       MidDayList: [],
       AfternoonList: [],
       EveningList: [],
-      TokenCount: [],
+      TokenCount: 0,
       string: "",
       edit: "",
       value: ""
@@ -24,6 +25,7 @@ class App extends React.Component {
     this.postEntries = this.postEntries.bind(this);
     this.updateEntries = this.updateEntries.bind(this);
     this.deleteEntries = this.deleteEntries.bind(this);
+    this.getCount = this.getCount.bind(this);
     //Input Handlers
     this.inputChange = this.inputChange.bind(this);
     this.valueChange = this.valueChange.bind(this);
@@ -35,6 +37,7 @@ class App extends React.Component {
     this.getEntries("MidDay");
     this.getEntries("Evening");
     this.getEntries("Afternoon");
+    this.getCount();
   }
 
   getEntries(string) {
@@ -93,11 +96,19 @@ class App extends React.Component {
       .catch(err => console.log(err));
   }
 
+  getCount() {
+    axios.get("/countTokens").then(({ data }) => {
+      this.setState({ TokenCount: data.count });
+    });
+  }
+
   render() {
     return (
       <div>
         <h1>Wow What an Amazing Dashboard</h1>
-        <p>Download Ticker/Count Goes Here</p>
+        <div className="counterContainer">
+          <Counter counter={this.state.TokenCount} getCount={this.getCount} />
+        </div>
         <Form
           handleSubmit={this.handleSubmit}
           valueChange={this.valueChange}

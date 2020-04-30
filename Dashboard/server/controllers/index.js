@@ -1,26 +1,33 @@
 const mongoose = require("mongoose");
 const uri = require("../../config/key").mongoURI;
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch((err) => console.log(err));
 const {
   Morning,
   Afternoon,
   MidDay,
   Evening,
-  tokenCounts
+  tokenCounts,
 } = require("../../db/index");
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const timeOfDay = {
   Morning: Morning,
   MidDay: MidDay,
   Afternoon: Afternoon,
-  Evening: Evening
+  Evening: Evening,
 };
 
 module.exports = {
   command: {
     getAll: (req, res) => {
       let time = req.query.timeOfDay;
-      timeOfDay[time].collection.find(null, async function(err, results) {
+      timeOfDay[time].collection.find(null, async function (err, results) {
         if (err) {
           return console.error(err);
         } else {
@@ -36,7 +43,12 @@ module.exports = {
     postOne: async (req, res) => {
       console.log(req.body, "BODY");
       let time = req.body.timeOfDay;
-      let result = { Prompt: req.body.input, Time: time };
+      let result = {
+        Prompt: req.body.input,
+        Time: time,
+        Sent: false,
+        LastSent: null,
+      };
       try {
         await timeOfDay[time].collection.insertOne(result);
         res.sendStatus(200);
@@ -52,7 +64,9 @@ module.exports = {
         { Prompt: request.oldPrompt },
         {
           Prompt: request.Prompt,
-          Time: request.Time
+          Time: request.Time,
+          Sent: false,
+          LastSent: null,
         },
         async (err, result) => {
           try {
@@ -75,6 +89,24 @@ module.exports = {
         console.log(err, "delete promise error");
       }
     },
-    countTokens: (req, res) => {}
-  }
+    countTokens: async (req, res) => {
+      let count = await tokenCounts.find({});
+      count = { count: count[0].count };
+      res.status(200).send(count);
+    },
+    recentlySent: async (req, res) => {
+      const recentMessages = {};
+      try {
+        for (let collection in timeOfDay) {
+          recentMessages[collection] = await timeOfDay[
+            collection
+          ].collection.find({ Sent: true }, { $limit: 5 });
+        }
+        res.status(200).send(recentMessages);
+      } catch (err) {
+        console.log("ERROR: ", err);
+        res.sendStatus(500);
+      }
+    },
+  },
 };

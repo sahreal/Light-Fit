@@ -1,6 +1,4 @@
 import React from "react";
-import EditModal from "./EditModal";
-import DeleteModal from "./DeleteModal";
 import "../styles.css";
 
 const ListEntry = ({ prompt, time }) => {
