@@ -75,7 +75,14 @@ class App extends React.Component {
     this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
   }
 
-  updateEntries(obj) {}
+  updateEntries(obj) {
+    axios
+      .put("/update", obj)
+      .then(() => {
+        this.getEntries(obj.Time);
+      })
+      .catch(err => console.log(err));
+  }
 
   deleteEntries(obj) {
     axios
@@ -106,11 +113,23 @@ class App extends React.Component {
           deleteEntries={this.deleteEntries}
         />
         <p>MidDay</p>
-        <List list={this.state.MidDayList} />
+        <List
+          list={this.state.MidDayList}
+          updateEntries={this.updateEntries}
+          deleteEntries={this.deleteEntries}
+        />
         <p>Afternoon</p>
-        <List list={this.state.AfternoonList} />
+        <List
+          list={this.state.AfternoonList}
+          updateEntries={this.updateEntries}
+          deleteEntries={this.deleteEntries}
+        />
         <p>Evening</p>
-        <List list={this.state.EveningList} />
+        <List
+          list={this.state.EveningList}
+          updateEntries={this.updateEntries}
+          deleteEntries={this.deleteEntries}
+        />
       </div>
     );
   }

@@ -13,7 +13,9 @@ function Form({ handleSubmit, valueChange, inputChange, value }) {
         <label>
           Select Time of Day:
           <select value={value} onChange={valueChange}>
-            <option value="">Placeholder</option>
+            <option value="" disable="true">
+              ---
+            </option>
             <option value="Morning">Morning</option>
             <option value="MidDay">MidDay</option>
             <option value="Afternoon">Afternoon</option>
