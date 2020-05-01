@@ -1,6 +1,7 @@
 import React from "react";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import sessions from "../helpers/userLogin.js";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const Nav = () => {
   const history = useHistory();
@@ -19,9 +20,7 @@ const Nav = () => {
       </div>
       <div className="logout">
         {location !== "/login" ? (
-          <p className="logout_button" onClick={logoutUser}>
-            logout
-          </p>
+          <ExitToAppIcon className="logout_button" onClick={logoutUser} />
         ) : (
           ""
         )}

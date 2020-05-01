@@ -5,19 +5,15 @@ import { useHistory } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const history = useHistory();
 
   const submitHandler = async () => {
     const isLoggedIn = await sessions.userLogin({ email, password });
-    isLoggedIn.error ? setError(isLoggedIn.error) : history.push("/home");
+    isLoggedIn.error ? alert(isLoggedIn.error) : history.push("/home");
   };
 
   return (
-    <div>
-      <div className="loginerror">
-        <p className="loginerror errormessage">{error}</p>
-      </div>
+    <div className="loginContainer">
       <form
         className="login-form user-form"
         onSubmit={(e) => {
@@ -27,7 +23,9 @@ const Login = () => {
       >
         <h4 className="user-form-heading">Login</h4>
         <div className="email-container">
-          <label>Email: </label>
+          <div className="user-form-label">
+            <label>Email: </label>
+          </div>
           <div className="email">
             <input
               type="email"
@@ -41,7 +39,9 @@ const Login = () => {
           </div>
         </div>
         <div className="password-container">
-          <label>Password: </label>
+          <div className="user-form-label">
+            <label>Password: </label>
+          </div>
           <div className="password">
             <input
               type="password"

@@ -47,6 +47,10 @@ h1 {
 NAV
 ========
 */
+.nav_bar {
+  display: flex;
+  place-content: space-between;
+}
 
 .nav_logo_image {
   height: 5rem;
@@ -54,12 +58,94 @@ NAV
 
 span.header {
   font-size: 45px;
-  top: 27px;
+  top: 18px;
   position: absolute;
+}
+.logout {
+  align-self: center;
+  width: 4rem;
 }
 
 .logout :hover {
   cursor: pointer;
+}
+
+/*
+===========
+LOGIN
+===========
+*/
+
+.user-form input {
+  width: 69%;
+  border: 0;
+  height: 28px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.user-form-container {
+  text-align: center;
+}
+
+.user-form-container:last-child {
+  text-align: center;
+  position: relative;
+}
+
+.email-container {
+  padding-bottom: 12px;
+}
+
+.user-form-heading {
+  margin: 0;
+  position: relative;
+  font-size: 19px;
+  text-decoration: underline;
+}
+.login-form .email-container {
+  padding-top: 27px;
+}
+
+.password-container {
+  padding-bottom: 20px;
+}
+
+.loginContainer {
+  text-align: center;
+}
+
+.user-form {
+  display: inline-block;
+  height: 40%;
+  width: 30%;
+  margin-top: 100px;
+}
+
+.user-form-label {
+  text-align: left;
+  padding-left: 66px;
+}
+
+.user-buttons-container {
+  text-align: center;
+  display: flex;
+  place-content: space-around;
+}
+
+button {
+  width: 6rem;
+  height: 3rem;
+  background: #f7f7f7;
+  border: 0;
+  border-radius: 30px;
+  font: 900 13px system-ui;
+}
+
+button:hover {
+  background: rgb(38, 99, 170);
+  cursor: pointer;
+  color: white;
 }
 
 /*LIST ENTRY */
