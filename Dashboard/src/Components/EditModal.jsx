@@ -30,7 +30,7 @@ const EditModal = ({ prompt, time, updateEntries }) => {
     setOpen(false);
   };
   return (
-    <div>
+    <div className="delete">
       <Modal
         aria-labelledby="simple-modal-title"
         open={open}
@@ -41,11 +41,20 @@ const EditModal = ({ prompt, time, updateEntries }) => {
             Edit and click confirm to update your entry
           </h2>
           <form>
-            <input
+            {/* <input
               type="text"
               onChange={handleMessage}
               placeholder="New Entry.."
-            />
+            /> */}
+            <textarea
+              rows="5"
+              cols="60"
+              type="text"
+              name="name"
+              onChange={handleMessage}
+              placeholder="Submit an updated version of this entry..."
+              style={{ "font-size": "100%" }}
+            ></textarea>
           </form>
           <div className="buttons">
             <button className="modal-button" onClick={handleClose}>
@@ -57,7 +66,9 @@ const EditModal = ({ prompt, time, updateEntries }) => {
           </div>
         </div>
       </Modal>{" "}
-      <button onClick={handleOpen}>Edit</button>
+      <button className="modal-button-regular" onClick={handleOpen}>
+        Edit
+      </button>
     </div>
   );
 };

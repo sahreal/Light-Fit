@@ -23,7 +23,7 @@ const DeleteModal = ({ prompt, time, deleteEntries }) => {
     setOpen(false);
   };
   return (
-    <div>
+    <div className="delete">
       <Modal
         aria-labelledby="simple-modal-title"
         open={open}
@@ -47,7 +47,11 @@ const DeleteModal = ({ prompt, time, deleteEntries }) => {
           </div>
         </div>
       </Modal>
-      <button value={prompt} onClick={handleOpen}>
+      <button
+        className="modal-button-regular"
+        value={prompt}
+        onClick={handleOpen}
+      >
         Delete
       </button>
     </div>
