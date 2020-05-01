@@ -8,13 +8,18 @@ mongoose
   })
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
+
 const {
   Morning,
   Afternoon,
   MidDay,
   Evening,
   tokenCounts,
+  users,
 } = require("../../db/index");
+const { createToken } = require("../helpers/tokenVerification.js");
+const validate = require("../helpers/userFormatValidation.js");
+const { encrypt, decrypt } = require("../helpers/encryption.js");
 
 const timeOfDay = {
   Morning: Morning,
@@ -109,4 +114,48 @@ module.exports = {
       }
     },
   },
+  addUser: async (req, res) => {
+    // Use Joi to validate user format meets criteria
+    const isValid = validate.registerUser(req.body);
+    if (isValid.error)
+      return res.status(400).send(isValid.error.details[0].message);
+
+    // Checks if user exists
+    const userExists = await users.findOne({ email: user.email });
+    if (userExists) return res.status(400).send("User Already Exists");
+
+    const user = {
+      name: req.body.user,
+      email: req.body.email,
+      password: encrypt(req.body.password),
+    };
+
+    // Insert the user into the DB
+    try {
+      await users.insertMany([user]);
+      return res.status(201).send("Successful");
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  },
+  login: async (req, res) => {
+    const isValid = validate.validUser(req.body);
+    if (isValid.error)
+      return res.status(400).send(isValid.error.details[0].message);
+
+    const userExists = await users.findOne({ email: req.body.email });
+    if (!userExists)
+      return res.status(400).send("Username or Password is worng");
+
+    const isValidPassword = await decrypt(
+      req.body.password,
+      userExists.password
+    );
+    if (!isValidPassword)
+      return res.status(400).send("Username or Password is worng");
+
+    const token = createToken(userExists._id);
+    res.status(200).header("ww-token", token);
+  },
+  logout: (req, res) => {},
 };
