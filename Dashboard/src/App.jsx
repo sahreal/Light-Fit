@@ -3,6 +3,11 @@ import axios from "axios";
 import List from "./Components/List";
 import Form from "./Components/Form";
 import Counter from "./Components/Counter";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { thistle } from "color-name";
 
 class App extends React.Component {
@@ -34,10 +39,10 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getEntries("Morning");
-    this.getEntries("MidDay");
-    this.getEntries("Evening");
-    this.getEntries("Afternoon");
-    this.getCount();
+    // this.getEntries("MidDay");
+    // this.getEntries("Evening");
+    // this.getEntries("Afternoon");
+    // this.getCount();
   }
 
   getEntries(string) {
@@ -76,6 +81,11 @@ class App extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
+    this.showSuccess();
+  }
+
+  showSuccess() {
+    setTimeout(setState({ success: true }), 4000);
   }
 
   updateEntries(obj) {
@@ -117,7 +127,82 @@ class App extends React.Component {
           edit={this.state.edit}
         />
 
-        <p>Morning</p>
+        <div className="expansion">
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className="time-of-day-list">Morning</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List
+                className="actual-list"
+                list={this.state.MorningList}
+                updateEntries={this.updateEntries}
+                deleteEntries={this.deleteEntries}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className="time-of-day-list">Mid-Day</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List
+                list={this.state.MidDayList}
+                updateEntries={this.updateEntries}
+                deleteEntries={this.deleteEntries}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className="time-of-day-list">Afternoon</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List
+                list={this.state.AfternoonList}
+                updateEntries={this.updateEntries}
+                deleteEntries={this.deleteEntries}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className="time-of-day-list">Evening</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List
+                list={this.state.EveningList}
+                updateEntries={this.updateEntries}
+                deleteEntries={this.deleteEntries}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+{
+  /* <p>Morning</p>
         <List
           list={this.state.MorningList}
           updateEntries={this.updateEntries}
@@ -140,10 +225,5 @@ class App extends React.Component {
           list={this.state.EveningList}
           updateEntries={this.updateEntries}
           deleteEntries={this.deleteEntries}
-        />
-      </div>
-    );
-  }
+        /> */
 }
-
-export default App;

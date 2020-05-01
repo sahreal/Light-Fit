@@ -1,13 +1,12 @@
 import React from "react";
 import "../styles.css";
 
-const ListEntry = ({ prompt, time }) => {
+const ListEntry = ({ prompt, id }) => {
   return (
-    <div>
+    <div className="text">
       <span>
-        {prompt}
-        ------
-        <strong>{time}</strong>
+        <p className="entry-id">{id}</p>
+        <p>{prompt}</p>
       </span>
     </div>
   );

@@ -4,30 +4,30 @@ mongoose
   .connect(uri, {
     useNewUrlParser: true,
     useFindAndModify: false,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
   })
   .then(() => console.log("MongoDB successfully connected"))
-  .catch((err) => console.log(err));
+  .catch(err => console.log(err));
 const {
   Morning,
   Afternoon,
   MidDay,
   Evening,
-  tokenCounts,
+  tokenCounts
 } = require("../../db/index");
 
 const timeOfDay = {
   Morning: Morning,
   MidDay: MidDay,
   Afternoon: Afternoon,
-  Evening: Evening,
+  Evening: Evening
 };
 
 module.exports = {
   command: {
     getAll: (req, res) => {
       let time = req.query.timeOfDay;
-      timeOfDay[time].collection.find(null, async function (err, results) {
+      timeOfDay[time].collection.find(null, async function(err, results) {
         if (err) {
           return console.error(err);
         } else {
@@ -41,13 +41,12 @@ module.exports = {
       });
     },
     postOne: async (req, res) => {
-      console.log(req.body, "BODY");
       let time = req.body.timeOfDay;
       let result = {
         Prompt: req.body.input,
         Time: time,
         Sent: false,
-        LastSent: null,
+        LastSent: null
       };
       try {
         await timeOfDay[time].collection.insertOne(result);
@@ -58,7 +57,6 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
-      console.log(request, "request");
       let time = req.body.Time;
       timeOfDay[time].collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
@@ -66,7 +64,7 @@ module.exports = {
           Prompt: request.Prompt,
           Time: request.Time,
           Sent: false,
-          LastSent: null,
+          LastSent: null
         },
         async (err, result) => {
           try {
@@ -80,7 +78,6 @@ module.exports = {
     },
     deleteOne: async (req, res) => {
       let result = req.body;
-      console.log(result, "RESULT");
       let time = req.body.Time;
       try {
         await timeOfDay[time].collection.deleteOne(result);
@@ -107,6 +104,6 @@ module.exports = {
         console.log("ERROR: ", err);
         res.sendStatus(500);
       }
-    },
-  },
+    }
+  }
 };
