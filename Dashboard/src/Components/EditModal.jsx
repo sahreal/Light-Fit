@@ -41,11 +41,6 @@ const EditModal = ({ prompt, time, updateEntries }) => {
             Edit and click confirm to update your entry
           </h2>
           <form>
-            {/* <input
-              type="text"
-              onChange={handleMessage}
-              placeholder="New Entry.."
-            /> */}
             <textarea
               rows="5"
               cols="60"
@@ -54,7 +49,9 @@ const EditModal = ({ prompt, time, updateEntries }) => {
               onChange={handleMessage}
               placeholder="Submit an updated version of this entry..."
               style={{ "font-size": "100%" }}
-            ></textarea>
+            >
+              {prompt}
+            </textarea>
           </form>
           <div className="buttons">
             <button className="modal-button" onClick={handleClose}>
