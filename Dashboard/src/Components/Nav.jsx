@@ -1,11 +1,13 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import sessions from "../helpers/userLogin.js";
 
 const Nav = () => {
+  const history = useHistory();
+
   const logoutUser = async () => {
     let isLoggedOut = await sessions.userLogout();
-    isLoggedOut ? <Redirect to="/" push={true} /> : "";
+    isLoggedOut ? history.push("/login") : "";
   };
 
   const location = window.location.pathname;

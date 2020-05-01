@@ -8,7 +8,6 @@ mongoose
   })
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
-
 const {
   Morning,
   Afternoon,
@@ -46,7 +45,6 @@ module.exports = {
       });
     },
     postOne: async (req, res) => {
-      console.log(req.body, "BODY");
       let time = req.body.timeOfDay;
       let result = {
         Prompt: req.body.input,
@@ -63,7 +61,6 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
-      console.log(request, "request");
       let time = req.body.Time;
       timeOfDay[time].collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
@@ -85,7 +82,6 @@ module.exports = {
     },
     deleteOne: async (req, res) => {
       let result = req.body;
-      console.log(result, "RESULT");
       let time = req.body.Time;
       try {
         await timeOfDay[time].collection.deleteOne(result);
