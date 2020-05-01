@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import loginUser from "../helpers/userLogin.js";
+import sessions from "../helpers/userLogin.js";
+import { useHistory } from "react-router-dom";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const history = useHistory();
 
   const submitHandler = async () => {
-    const isLoggedIn = await loginUser({ email, password });
-    !isLoggedIn.error ? history.pushState("/home") : setError(isLoggedIn.error);
+    const isLoggedIn = await sessions.userLogin({ email, password });
+    isLoggedIn.error ? setError(isLoggedIn.error) : history.push("/home");
   };
 
   return (

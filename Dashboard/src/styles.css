@@ -3,6 +3,26 @@ h1 {
   background-color: black;
 }
 
+/*
+========
+NAV
+========
+*/
+
+.nav_logo_image {
+  height: 5rem;
+}
+
+span.header {
+  font-size: 45px;
+  top: 27px;
+  position: absolute;
+}
+
+.logout :hover {
+  cursor: pointer;
+}
+
 /*LIST ENTRY */
 
 .alert-modal {
