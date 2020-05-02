@@ -156,7 +156,7 @@ module.exports = {
       const token = createToken(userExists._id);
       res
         .status(200)
-        .cookie("ww-token", token, { httpOnly: true, maxAge: 360000 })
+        .cookie("ww-token", token, { httpOnly: true, maxAge: 3600000 })
         .send({ loggedIn: true });
     },
     logout: (req, res) => {

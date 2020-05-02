@@ -28,7 +28,7 @@ module.exports = {
   },
   createToken: (id) => {
     const token = Jwt.sign({ id: id }, secret.Secret_Token, {
-      expiresIn: 360000,
+      expiresIn: 3600000,
     });
     return token;
   },
