@@ -8,7 +8,6 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { thistle } from "color-name";
 
 class App extends React.Component {
   constructor(props) {
@@ -21,8 +20,11 @@ class App extends React.Component {
       EveningList: [],
       TokenCount: 0,
       string: "",
-      edit: "",
-      value: ""
+      entry: "",
+      link: "",
+      timeOfDay: "",
+      emojis: [],
+      loading: true
     };
 
     //CRUD
@@ -33,16 +35,13 @@ class App extends React.Component {
     this.getCount = this.getCount.bind(this);
     //Input Handlers
     this.inputChange = this.inputChange.bind(this);
-    this.valueChange = this.valueChange.bind(this);
+    this.timeOfDayChange = this.timeOfDayChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateEmoji = this.updateEmoji.bind(this);
   }
 
   componentDidMount() {
-    this.getEntries("Morning");
-    // this.getEntries("MidDay");
-    // this.getEntries("Evening");
-    // this.getEntries("Afternoon");
-    // this.getCount();
+    this.getCount();
   }
 
   getEntries(string) {
@@ -60,32 +59,14 @@ class App extends React.Component {
   }
 
   postEntries(newMessage) {
+    this.setState({ loading: true });
     axios
       .post("/postOne", newMessage)
       .then(() => {
-        this.getEntries(this.state.value);
+        this.getEntries(this.state.timeOfDay);
+        this.setState({ loading: false });
       })
       .catch(err => console.log(err));
-  }
-
-  inputChange(event) {
-    let value = event.target.value;
-    this.setState({ edit: value });
-  }
-
-  valueChange(event) {
-    let value = event.target.value;
-    this.setState({ value: value });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.postEntries({ input: this.state.edit, timeOfDay: this.state.value });
-    this.showSuccess();
-  }
-
-  showSuccess() {
-    setTimeout(setState({ success: true }), 4000);
   }
 
   updateEntries(obj) {
@@ -109,26 +90,58 @@ class App extends React.Component {
   getCount() {
     axios.get("/countTokens").then(({ data }) => {
       this.setState({ TokenCount: data.count });
+      this.setState({ loading: false });
     });
   }
 
+  inputChange(event) {
+    let name = event.target.name;
+    let value = event.target.value;
+
+    this.setState({ [name]: value });
+  }
+
+  timeOfDayChange(event) {
+    let value = event.target.value;
+    this.setState({ timeOfDay: value });
+  }
+
+  handleSubmit(event) {
+    this.postEntries({
+      input:
+        this.state.entry + this.state.emojis.join("") + "\n" + this.state.link,
+      timeOfDay: this.state.timeOfDay
+    });
+    this.setState({ emojis: [] });
+  }
+
+  updateEmoji(newArray) {
+    this.setState({ emojis: newArray });
+  }
+
   render() {
+    const loading = this.state.loading;
+
+    if (loading) {
+      return null;
+    }
     return (
       <div>
-        <h1>Wow What an Amazing Dashboard</h1>
+        <h1>Light + Fit SlackApp Dashboard</h1>
         <div className="counterContainer">
           <Counter counter={this.state.TokenCount} getCount={this.getCount} />
         </div>
         <Form
           handleSubmit={this.handleSubmit}
-          valueChange={this.valueChange}
+          timeOfDayChange={this.timeOfDayChange}
           inputChange={this.inputChange}
           value={this.state.value}
           edit={this.state.edit}
+          emojis={this.state.emojis}
+          updateEmoji={this.updateEmoji}
         />
-
         <div className="expansion">
-          <ExpansionPanel>
+          <ExpansionPanel onClick={() => this.getEntries("Morning")}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -145,7 +158,7 @@ class App extends React.Component {
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          <ExpansionPanel>
+          <ExpansionPanel onClick={() => this.getEntries("MidDay")}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -161,7 +174,7 @@ class App extends React.Component {
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          <ExpansionPanel>
+          <ExpansionPanel onClick={() => this.getEntries("Afternoon")}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -177,7 +190,7 @@ class App extends React.Component {
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          <ExpansionPanel>
+          <ExpansionPanel onClick={() => this.getEntries("Evening")}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -200,30 +213,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-{
-  /* <p>Morning</p>
-        <List
-          list={this.state.MorningList}
-          updateEntries={this.updateEntries}
-          deleteEntries={this.deleteEntries}
-        />
-        <p>MidDay</p>
-        <List
-          list={this.state.MidDayList}
-          updateEntries={this.updateEntries}
-          deleteEntries={this.deleteEntries}
-        />
-        <p>Afternoon</p>
-        <List
-          list={this.state.AfternoonList}
-          updateEntries={this.updateEntries}
-          deleteEntries={this.deleteEntries}
-        />
-        <p>Evening</p>
-        <List
-          list={this.state.EveningList}
-          updateEntries={this.updateEntries}
-          deleteEntries={this.deleteEntries}
-        /> */
-}

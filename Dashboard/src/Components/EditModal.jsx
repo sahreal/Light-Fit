@@ -3,6 +3,7 @@ import Modal from "@material-ui/core/Modal";
 
 const EditModal = ({ prompt, time, updateEntries }) => {
   const [newMessage, setMessage] = useState(newMessage);
+  const [newLink, setLink] = useState(newLink);
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -13,20 +14,37 @@ const EditModal = ({ prompt, time, updateEntries }) => {
     setOpen(false);
   };
   const handleMessage = event => {
-    console.log(event.target.value, "VALUE");
     let letter = event.target.value;
     setMessage(letter);
   };
 
+  const handleLink = event => {
+    let link = event.target.value;
+    setLink(link);
+  };
+
   const editH = event => {
     let newPrompt = newMessage;
-    console.log(newMessage, "NEWMESSAGE");
+
     let newTime = time;
-
-    let obj = { oldPrompt: prompt, Prompt: newPrompt, Time: newTime };
-
+    let obj = {};
+    if (newMessage === undefined) {
+      obj = {
+        oldPrompt: prompt,
+        Prompt: prompt + "\n" + newLink,
+        Time: newTime
+      };
+    } else {
+      obj = {
+        oldPrompt: prompt,
+        Prompt: newPrompt + "\n" + newLink,
+        Time: newTime
+      };
+    }
+    console.log(obj, "this obj");
     updateEntries(obj);
-    setMessage("");
+    // setMessage("");
+    setLink("");
     setOpen(false);
   };
   return (
@@ -37,9 +55,7 @@ const EditModal = ({ prompt, time, updateEntries }) => {
         onClose={handleClose}
       >
         <div className="alert-modal">
-          <h2 id="simple-modal-title">
-            Edit and click confirm to update your entry
-          </h2>
+          <h2 id="simple-modal-title">Click confirm to update your entry</h2>
           <form>
             <textarea
               rows="5"
@@ -47,11 +63,18 @@ const EditModal = ({ prompt, time, updateEntries }) => {
               type="text"
               name="name"
               onChange={handleMessage}
-              placeholder="Submit an updated version of this entry..."
-              style={{ "font-size": "100%" }}
+              placeholder="Update text here..."
+              style={{ fontSize: "100%" }}
             >
               {prompt}
             </textarea>
+            <input
+              className="add-video"
+              type="text"
+              name="link"
+              placeholder="If updating link, delete from textbox and enter new link here..."
+              onChange={handleLink}
+            ></input>
           </form>
           <div className="buttons">
             <button className="modal-button" onClick={handleClose}>
