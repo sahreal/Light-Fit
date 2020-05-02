@@ -1,7 +1,14 @@
 import React from "react";
-import CheckIcon from "@material-ui/icons/Check";
+import EmojiPicker from "./EmojiPicker";
 
-function Form({ handleSubmit, valueChange, inputChange, value }) {
+function Form({
+  handleSubmit,
+  timeOfDayChange,
+  inputChange,
+  value,
+  emojis,
+  updateEmoji
+}) {
   return (
     <div className="form">
       <form>
@@ -11,20 +18,29 @@ function Form({ handleSubmit, valueChange, inputChange, value }) {
             rows="5"
             cols="60"
             type="text"
-            name="name"
+            name="entry"
             onChange={inputChange}
             placeholder="Add new entry, select a time of day, click submit..."
-            style={{ "font-size": "100%" }}
+            style={{ fontSize: "100%", borderRadius: "10px" }}
           ></textarea>
+          <input
+            className="add-video"
+            type="text"
+            name="link"
+            placeholder="Add video link here..."
+            onChange={inputChange}
+            style={{ color: "blue" }}
+          ></input>
         </label>
       </form>
       <form onSubmit={handleSubmit}>
-        <label style={{ color: "whitesmoke" }}>
+        <label>
           <div className="select-words"> Select Time of Day:</div>
           <select
             className="select-selected"
+            name="timeOfDay"
             value={value}
-            onChange={valueChange}
+            onChange={timeOfDayChange}
           >
             <option value="" disable="true">
               ---
@@ -41,11 +57,11 @@ function Form({ handleSubmit, valueChange, inputChange, value }) {
           value="Submit"
           style={{ margin: "0px" }}
         />
-        <div>
-          Successful submit
-          <CheckIcon />
-        </div>
       </form>
+      <div style={{ color: "whitesmoke", margin: "0px 10px" }}>
+        *Emojis can only be added to the end of entries*
+      </div>
+      <EmojiPicker emojis={emojis} updateEmoji={updateEmoji} />
     </div>
   );
 }
