@@ -10,7 +10,7 @@ body {
   font-family: "arial";
 }
 
-.loader:empty {
+.loader {
   position: absolute;
   top: calc(50% - 4em);
   left: calc(50% - 4em);
