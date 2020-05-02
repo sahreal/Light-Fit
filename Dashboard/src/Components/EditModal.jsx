@@ -59,6 +59,7 @@ const EditModal = ({ prompt, time, updateEntries }) => {
           <form>
             <textarea
               rows="5"
+              defaultValue={prompt}
               cols="60"
               type="text"
               name="name"
