@@ -4,17 +4,17 @@ mongoose
   .connect(uri, {
     useNewUrlParser: true,
     useFindAndModify: false,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
   })
   .then(() => console.log("MongoDB successfully connected"))
-  .catch((err) => console.log(err));
+  .catch(err => console.log(err));
 const {
   Morning,
   Afternoon,
   MidDay,
   Evening,
   tokenCounts,
-  users,
+  users
 } = require("../../db/index");
 const { createToken } = require("../helpers/tokenVerification.js");
 const validate = require("../helpers/userFormatValidation.js");
@@ -24,14 +24,14 @@ const timeOfDay = {
   Morning: Morning,
   MidDay: MidDay,
   Afternoon: Afternoon,
-  Evening: Evening,
+  Evening: Evening
 };
 
 module.exports = {
   command: {
     getAll: (req, res) => {
       let time = req.query.timeOfDay;
-      timeOfDay[time].collection.find(null, async function (err, results) {
+      timeOfDay[time].collection.find(null, async function(err, results) {
         if (err) {
           return console.error(err);
         } else {
@@ -50,7 +50,7 @@ module.exports = {
         Prompt: req.body.input,
         Time: time,
         Sent: false,
-        LastSent: null,
+        LastSent: null
       };
       try {
         await timeOfDay[time].collection.insertOne(result);
@@ -61,14 +61,16 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
+      console.log(request, "request");
       let time = req.body.Time;
+
       timeOfDay[time].collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
         {
           Prompt: request.Prompt,
           Time: request.Time,
           Sent: false,
-          LastSent: null,
+          LastSent: null
         },
         async (err, result) => {
           try {
@@ -122,7 +124,7 @@ module.exports = {
       const user = {
         user_name: req.body.user,
         email: req.body.email,
-        password: await encrypt(req.body.password),
+        password: await encrypt(req.body.password)
       };
 
       // Insert the user into the DB
@@ -140,14 +142,15 @@ module.exports = {
         return res.status(400).send(isValid.error.details[0].message);
 
       // validates if the user exists
-      const userExists = await users.findOne({ email: req.body.email });
+      const userExists = await users.find();
+      console.log(userExists, "USer");
       if (!userExists)
         return res.status(400).send("Username or Password is wrong");
 
       // validates thes password with bcrypt
       const isValidPassword = await decrypt(
         req.body.password,
-        userExists.password
+        userExists[0].password
       );
       if (!isValidPassword)
         return res.status(400).send("Username or Password is wrong");
@@ -156,12 +159,12 @@ module.exports = {
       const token = createToken(userExists._id);
       res
         .status(200)
-        .cookie("ww-token", token, { httpOnly: true, maxAge: 360000 })
+        .cookie("ww-token", token, { httpOnly: true, maxAge: 3600000 })
         .send({ loggedIn: true });
     },
     logout: (req, res) => {
       res.clearCookie("ww-token");
       res.status(200).send({ loggedOut: true });
-    },
-  },
+    }
+  }
 };

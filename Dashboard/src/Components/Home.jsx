@@ -120,93 +120,102 @@ class App extends Component {
   }
 
   render() {
+    //spinner
     const loading = this.state.loading;
 
-    if (loading) {
-      return null;
-    }
     return (
-      <div className="loader">
-        <h1>Light + Fit SlackApp Messages</h1>
-        <div className="counterContainer">
-          <Counter counter={this.state.TokenCount} getCount={this.getCount} />
-        </div>
-        <Form
-          handleSubmit={this.handleSubmit}
-          timeOfDayChange={this.timeOfDayChange}
-          inputChange={this.inputChange}
-          value={this.state.value}
-          edit={this.state.edit}
-          emojis={this.state.emojis}
-          updateEmoji={this.updateEmoji}
-        />
-        <div className="expansion">
-          <ExpansionPanel onClick={() => this.getEntries("Morning")}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className="time-of-day-list">Morning</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <List
-                className="actual-list"
-                list={this.state.MorningList}
-                updateEntries={this.updateEntries}
-                deleteEntries={this.deleteEntries}
+      <div>
+        {loading ? (
+          <div className="loader"></div>
+        ) : (
+          <div className="no-actual-clas-here">
+            <h1>Light + Fit SlackApp Messages</h1>
+            <div className="counterContainer">
+              <Counter
+                counter={this.state.TokenCount}
+                getCount={this.getCount}
               />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel onClick={() => this.getEntries("MidDay")}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className="time-of-day-list">Mid-Day</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <List
-                list={this.state.MidDayList}
-                updateEntries={this.updateEntries}
-                deleteEntries={this.deleteEntries}
-              />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel onClick={() => this.getEntries("Afternoon")}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className="time-of-day-list">Afternoon</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <List
-                list={this.state.AfternoonList}
-                updateEntries={this.updateEntries}
-                deleteEntries={this.deleteEntries}
-              />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel onClick={() => this.getEntries("Evening")}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className="time-of-day-list">Evening</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <List
-                list={this.state.EveningList}
-                updateEntries={this.updateEntries}
-                deleteEntries={this.deleteEntries}
-              />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </div>
+            </div>
+            <Form
+              handleSubmit={this.handleSubmit}
+              timeOfDayChange={this.timeOfDayChange}
+              inputChange={this.inputChange}
+              value={this.state.value}
+              edit={this.state.edit}
+              emojis={this.state.emojis}
+              updateEmoji={this.updateEmoji}
+            />
+            <div className="expansion">
+              <ExpansionPanel onClick={() => this.getEntries("Morning")}>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className="time-of-day-list">Morning</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List
+                    className="actual-list"
+                    list={this.state.MorningList}
+                    updateEntries={this.updateEntries}
+                    deleteEntries={this.deleteEntries}
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <ExpansionPanel onClick={() => this.getEntries("MidDay")}>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className="time-of-day-list">Mid-Day</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List
+                    list={this.state.MidDayList}
+                    updateEntries={this.updateEntries}
+                    deleteEntries={this.deleteEntries}
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <ExpansionPanel onClick={() => this.getEntries("Afternoon")}>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className="time-of-day-list">
+                    Afternoon
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List
+                    list={this.state.AfternoonList}
+                    updateEntries={this.updateEntries}
+                    deleteEntries={this.deleteEntries}
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <ExpansionPanel onClick={() => this.getEntries("Evening")}>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className="time-of-day-list">Evening</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List
+                    list={this.state.EveningList}
+                    updateEntries={this.updateEntries}
+                    deleteEntries={this.deleteEntries}
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

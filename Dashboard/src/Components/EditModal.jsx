@@ -2,8 +2,8 @@ import React, { useState, useRef } from "react";
 import Modal from "@material-ui/core/Modal";
 
 const EditModal = ({ prompt, time, updateEntries }) => {
-  const [newMessage, setMessage] = useState(newMessage);
-  const [newLink, setLink] = useState(newLink);
+  const [newMessage, setMessage] = useState("");
+  const [newLink, setLink] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -24,26 +24,27 @@ const EditModal = ({ prompt, time, updateEntries }) => {
   };
 
   const editH = event => {
-    let newPrompt = newMessage;
-
+    let newPrompt = newMessage || "";
     let newTime = time;
+    let link = newLink || "";
     let obj = {};
-    if (newMessage === undefined) {
+
+    if (newPrompt === undefined || newPrompt === "") {
       obj = {
         oldPrompt: prompt,
-        Prompt: prompt + "\n" + newLink,
+        Prompt: prompt + "\n" + link,
         Time: newTime
       };
     } else {
       obj = {
         oldPrompt: prompt,
-        Prompt: newPrompt + "\n" + newLink,
+        Prompt: newPrompt + "\n" + link,
         Time: newTime
       };
     }
-    console.log(obj, "this obj");
+
     updateEntries(obj);
-    // setMessage("");
+    setMessage("");
     setLink("");
     setOpen(false);
   };
@@ -58,6 +59,7 @@ const EditModal = ({ prompt, time, updateEntries }) => {
           <h2 id="simple-modal-title">Click confirm to update your entry</h2>
           <form>
             <textarea
+              defaultValue={prompt}
               rows="5"
               cols="60"
               type="text"
@@ -65,9 +67,7 @@ const EditModal = ({ prompt, time, updateEntries }) => {
               onChange={handleMessage}
               placeholder="Update text here..."
               style={{ fontSize: "100%" }}
-            >
-              {prompt}
-            </textarea>
+            ></textarea>
             <input
               className="add-video"
               type="text"
