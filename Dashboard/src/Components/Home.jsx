@@ -24,7 +24,7 @@ class App extends Component {
       link: "",
       timeOfDay: "",
       emojis: [],
-      loading: false
+      loading: true
     };
 
     //CRUD
@@ -126,8 +126,8 @@ class App extends Component {
       return null;
     }
     return (
-      <div>
-        <h1>Light + Fit SlackApp Dashboard</h1>
+      <div className="loader">
+        <h1>Light + Fit SlackApp Messages</h1>
         <div className="counterContainer">
           <Counter counter={this.state.TokenCount} getCount={this.getCount} />
         </div>

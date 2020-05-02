@@ -20,7 +20,11 @@ const Nav = () => {
       </div>
       <div className="logout">
         {location !== "/login" ? (
-          <ExitToAppIcon className="logout_button" onClick={logoutUser} />
+          <div className="logout-prompt">
+            {" "}
+            LogOut
+            <ExitToAppIcon className="logout_button" onClick={logoutUser} />
+          </div>
         ) : (
           ""
         )}

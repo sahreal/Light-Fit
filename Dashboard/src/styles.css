@@ -6,7 +6,7 @@ html {
 
 body {
   background-size: auto;
-  background: rgb(226, 184, 226);
+  background: plum;
   font-family: "arial";
 }
 
@@ -34,7 +34,7 @@ body {
 h1 {
   color: white;
   border-style: double;
-  background-color: rgb(133, 54, 133);
+  background-color: rgb(94, 51, 148);
   text-align: center;
   padding: 25px;
   margin: auto;
@@ -67,6 +67,12 @@ span.header {
 
 .logout :hover {
   cursor: pointer;
+}
+
+.logout-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /*
@@ -132,7 +138,7 @@ LOGIN
   place-content: space-around;
 }
 
-button {
+.user-buttons-container button {
   width: 6rem;
   height: 3rem;
   background: #f7f7f7;
@@ -141,13 +147,17 @@ button {
   font: 900 13px system-ui;
 }
 
-button:hover {
-  background: rgb(38, 99, 170);
+.user-buttons-container button:hover {
+  background: rgb(94, 51, 148);
   cursor: pointer;
   color: white;
 }
 
-/*LIST ENTRY */
+/*
+=========
+LIST ENTRY
+=========
+*/
 
 .alert-modal {
   background-color: white;
@@ -176,7 +186,7 @@ button:hover {
 }
 
 .modal-button-confirm {
-  background-color: rgb(133, 54, 133);
+  background-color: rgb(94, 51, 148);
   border: none;
   color: white;
   padding: 15px 32px;
@@ -187,6 +197,18 @@ button:hover {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.modal-button-confirm:hover {
+  background: lavender;
+  cursor: pointer;
+  color: white;
+}
+
+.modal-button:hover {
+  background: lavender;
+  cursor: pointer;
+  color: white;
 }
 
 /*COUNTER*/
@@ -245,7 +267,7 @@ span svg.MuiSvgIcon-root:hover {
 }
 
 .modal-button-regular {
-  background-color: rgb(133, 54, 133);
+  background-color: rgb(94, 51, 148);
   border: none;
   color: whitesmoke;
   padding: 5px 13px;
@@ -256,6 +278,12 @@ span svg.MuiSvgIcon-root:hover {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.modal-button-regular:hover {
+  background: lavender;
+  cursor: pointer;
+  color: white;
 }
 
 .delete {
@@ -335,29 +363,9 @@ p {
   color: #ffffff;
   padding: 8px 16px;
   border: 1px solid transparent;
-  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  border-color: white;
   cursor: pointer;
   user-select: none;
-}
-
-/*style items (options):*/
-.select-items {
-  position: absolute;
-  background-color: DodgerBlue;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-}
-
-/*hide the items when the select box is closed:*/
-.select-hide {
-  display: none;
-}
-
-.select-items div:hover,
-.same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 /*EMOJI*/
@@ -370,4 +378,9 @@ p {
 
 .emoji-button {
   font-size: 300%;
+}
+
+.emoji-button:hover {
+  font-size: 300%;
+  background-color: rgb(94, 51, 148);
 }

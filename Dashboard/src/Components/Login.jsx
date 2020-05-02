@@ -16,7 +16,7 @@ const Login = () => {
     <div className="loginContainer">
       <form
         className="login-form user-form"
-        onSubmit={(e) => {
+        onSubmit={e => {
           e.preventDefault();
           submitHandler();
         }}
@@ -31,7 +31,7 @@ const Login = () => {
               type="email"
               name="user_email"
               placeholder="Enter valid email address.."
-              onChange={(event) => {
+              onChange={event => {
                 setEmail(event.target.value);
               }}
               required
@@ -47,7 +47,7 @@ const Login = () => {
               type="password"
               name="pwd"
               placeholder="Enter valid password.."
-              onChange={(event) => {
+              onChange={event => {
                 setPassword(event.target.value);
               }}
               required
@@ -55,10 +55,10 @@ const Login = () => {
           </div>
         </div>
         <div className="user-buttons-container">
-          <button type="submit" className="submit">
+          <button className="button-login" type="submit" className="submit">
             Login
           </button>
-          <button type="reset" className="reset">
+          <button className="button-login" type="reset" className="reset">
             Reset
           </button>
         </div>
