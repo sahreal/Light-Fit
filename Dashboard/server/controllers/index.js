@@ -14,7 +14,11 @@ const {
   MidDay,
   Evening,
   tokenCounts,
+  users,
 } = require("../../db/index");
+const { createToken } = require("../helpers/tokenVerification.js");
+const validate = require("../helpers/userFormatValidation.js");
+const { encrypt, decrypt } = require("../helpers/encryption.js");
 
 const timeOfDay = {
   Morning: Morning,
@@ -41,7 +45,6 @@ module.exports = {
       });
     },
     postOne: async (req, res) => {
-      console.log(req.body, "BODY");
       let time = req.body.timeOfDay;
       let result = {
         Prompt: req.body.input,
@@ -58,7 +61,6 @@ module.exports = {
     },
     update: (req, res) => {
       let request = req.body;
-      console.log(request, "request");
       let time = req.body.Time;
       timeOfDay[time].collection.findOneAndReplace(
         { Prompt: request.oldPrompt },
@@ -80,7 +82,6 @@ module.exports = {
     },
     deleteOne: async (req, res) => {
       let result = req.body;
-      console.log(result, "RESULT");
       let time = req.body.Time;
       try {
         await timeOfDay[time].collection.deleteOne(result);
@@ -107,6 +108,60 @@ module.exports = {
         console.log("ERROR: ", err);
         res.sendStatus(500);
       }
+    },
+    addUser: async (req, res) => {
+      // Use Joi to validate user format meets criteria
+      const isValid = validate.registerUser(req.body);
+      if (isValid.error)
+        return res.status(400).send(isValid.error.details[0].message);
+
+      // Checks if user exists
+      const userExists = await users.findOne({ email: req.body.email });
+      if (userExists) return res.status(400).send("User Already Exists");
+
+      const user = {
+        user_name: req.body.user,
+        email: req.body.email,
+        password: await encrypt(req.body.password),
+      };
+
+      // Insert the user into the DB
+      try {
+        await users.insertMany([user]);
+        return res.status(201).send("Successful");
+      } catch (err) {
+        res.status(400).send(err);
+      }
+    },
+    login: async (req, res) => {
+      // validates the user request format
+      const isValid = validate.validUser(req.body);
+      if (isValid.error)
+        return res.status(400).send(isValid.error.details[0].message);
+
+      // validates if the user exists
+      const userExists = await users.findOne({ email: req.body.email });
+      if (!userExists)
+        return res.status(400).send("Username or Password is wrong");
+
+      // validates thes password with bcrypt
+      const isValidPassword = await decrypt(
+        req.body.password,
+        userExists.password
+      );
+      if (!isValidPassword)
+        return res.status(400).send("Username or Password is wrong");
+
+      // creates the token and sets it in the cookie. Expires in an hr
+      const token = createToken(userExists._id);
+      res
+        .status(200)
+        .cookie("ww-token", token, { httpOnly: true, maxAge: 360000 })
+        .send({ loggedIn: true });
+    },
+    logout: (req, res) => {
+      res.clearCookie("ww-token");
+      res.status(200).send({ loggedOut: true });
     },
   },
 };

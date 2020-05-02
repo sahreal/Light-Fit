@@ -1,6 +1,151 @@
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background-size: cover;
+}
+
+/* @font-face {
+  font-family: "mont";
+  src: url(Mont.woff);
+}
+
+@font-face {
+  font-family: "mont-heavy";
+  src: url(Mont.woff);
+} */
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background-size: auto;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    324deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(236, 156, 191, 1) 0%,
+    rgba(136, 7, 199, 1) 100%
+  );
+  margin: 0;
+  padding: 0;
+  font-family: "arial";
+}
+
 h1 {
   color: white;
-  background-color: black;
+  border-style: double;
+  background-color: rgb(133, 54, 133);
+  text-align: center;
+  padding: 25px;
+  margin: auto;
+  background-size: auto;
+}
+
+/*
+========
+NAV
+========
+*/
+.nav_bar {
+  display: flex;
+  place-content: space-between;
+}
+
+.nav_logo_image {
+  height: 5rem;
+}
+
+span.header {
+  font-size: 45px;
+  top: 18px;
+  position: absolute;
+}
+.logout {
+  align-self: center;
+  width: 4rem;
+}
+
+.logout :hover {
+  cursor: pointer;
+}
+
+/*
+===========
+LOGIN
+===========
+*/
+
+.user-form input {
+  width: 69%;
+  border: 0;
+  height: 28px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.user-form-container {
+  text-align: center;
+}
+
+.user-form-container:last-child {
+  text-align: center;
+  position: relative;
+}
+
+.email-container {
+  padding-bottom: 12px;
+}
+
+.user-form-heading {
+  margin: 0;
+  position: relative;
+  font-size: 19px;
+  text-decoration: underline;
+}
+.login-form .email-container {
+  padding-top: 27px;
+}
+
+.password-container {
+  padding-bottom: 20px;
+}
+
+.loginContainer {
+  text-align: center;
+}
+
+.user-form {
+  display: inline-block;
+  height: 40%;
+  width: 30%;
+  margin-top: 100px;
+}
+
+.user-form-label {
+  text-align: left;
+  padding-left: 66px;
+}
+
+.user-buttons-container {
+  text-align: center;
+  display: flex;
+  place-content: space-around;
+}
+
+button {
+  width: 6rem;
+  height: 3rem;
+  background: #f7f7f7;
+  border: 0;
+  border-radius: 30px;
+  font: 900 13px system-ui;
+}
+
+button:hover {
+  background: rgb(38, 99, 170);
+  cursor: pointer;
+  color: white;
 }
 
 /*LIST ENTRY */
@@ -28,10 +173,11 @@ h1 {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .modal-button-confirm {
-  background-color: #1082c7;
+  background-color: rgb(133, 54, 133);
   border: none;
   color: white;
   padding: 15px 32px;
@@ -41,7 +187,10 @@ h1 {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  border-radius: 4px;
 }
+
+/*COUNTER*/
 
 h2.downloadHeader {
   margin: 0;
@@ -50,6 +199,7 @@ h2.downloadHeader {
 .counterNumber {
   margin-left: 20px;
   margin-right: 5px;
+
   font-size: 24px;
 }
 span.refreshIcon {
@@ -68,10 +218,136 @@ span svg.MuiSvgIcon-root:hover {
 .counterContainer {
   display: flex;
   justify-content: center;
+  margin: 20px 0px 20px 0px;
 }
 
 .downloadCounter {
   display: flex;
   width: 80%;
   justify-content: center;
+}
+
+/*LIST*/
+
+.expansion {
+  margin: 80px;
+}
+
+.list-div {
+  height: 100%;
+}
+
+.cell {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  height: 100%;
+  border-style: double;
+}
+
+.modal-button-regular {
+  background-color: rgb(133, 54, 133);
+  border: none;
+  color: whitesmoke;
+  padding: 5px 13px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete {
+  margin: 30px 5px 20px 5px;
+}
+
+/*LISTENTRY*/
+
+.text {
+  margin: 0px 0px 0px 30px;
+}
+
+.text span {
+  display: flex;
+}
+
+p {
+  margin: 30px 50px;
+}
+
+.entry-id {
+  margin: 30px 5px 0;
+  font-weight: 700;
+}
+
+/*Form*/
+
+.form {
+  flex-direction: column;
+  margin: 0px 350px;
+  align-items: center;
+}
+
+/*SELECT*/
+.select-words {
+  margin: 5px;
+}
+
+.select-selected {
+  background-color: plum;
+  margin: 10px 6px 10px 0px;
+
+  width: 70%;
+  font-size: 120%;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
 }
