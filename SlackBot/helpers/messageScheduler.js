@@ -34,7 +34,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
         const hour = scheduledTime[time];
         const min = dailyMessage[time].min;
         let day = new Date().getDay();
-        if (day === 5) {
+        if (Number(day) >= 5) {
           day = 1;
         } else {
           day++;
