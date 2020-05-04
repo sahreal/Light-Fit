@@ -16,7 +16,6 @@ html {
 }
 
 body {
-  background: rgb(255, 255, 255);
   background: linear-gradient(
     324deg,
     rgba(255, 255, 255, 1) 0%,
@@ -26,6 +25,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: "mont";
+}
+
+#logo {
+  position: absolute;
+  top: -15px;
 }
 
 .header {
@@ -45,12 +49,13 @@ body {
   margin: 40px 5px 5px 0px;
 }
 
-.header img {
+/* .header img {
   position: absolute;
   top: -20px;
   left: 30px;
   height: 30%;
-}
+  max-width: 100%;
+} */
 .header-text a .privacy {
   padding: 0px 10px 0px 0px !important;
   color: whitesmoke;
@@ -72,7 +77,7 @@ a img {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5px;
+  margin-top: 75px;
   box-shadow: 5px 5px 6px 0px rgba(136, 7, 199, 1);
 }
 
