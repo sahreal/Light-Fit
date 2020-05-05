@@ -1,12 +1,12 @@
 const cron = require("cron");
 const { WebClient } = require("@slack/web-api");
 const cronMonitor = require("./cronMonitor.js").monitor;
-const dailyMessage = require("./getUnsentMessage.js").dailyMessage;
+const { dailyMessage } = require("./getUnsentMessage.js");
 
-const messageScheduler = async (token, channel, timezone, workspace) => {
+const messageScheduler = async (token, channel, workspace) => {
   // initialize a bot client
   const bot = new WebClient(token);
-
+  const timezone = "America/New_York";
   const scheduledTime = {
     Morning: 9,
     Midday: 12,
@@ -26,7 +26,9 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
           channel: channel,
           text: dailyMessage[time].prompt, // Pulled from daily refresh
         });
-        job.stop();
+        // removes job from the cronMonitor object to avoid errors in workspace uninstall process
+        cronMonitor[workspace][channel][time] = null;
+        job.stop(); // stop the job from running
       };
 
       // Fires each day the onTick completes
@@ -34,7 +36,7 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
         const hour = scheduledTime[time];
         const min = dailyMessage[time].min;
         let day = new Date().getDay();
-        if (day === 5) {
+        if (Number(day) >= 5) {
           day = 1;
         } else {
           day++;
@@ -45,23 +47,34 @@ const messageScheduler = async (token, channel, timezone, workspace) => {
         let newJob = new cron.CronJob(
           jobTime,
           onTick,
-          onComplete,
+          onComplete, // recursively call the onComplete
           true,
           timezone
         );
 
-        cronMonitor[workspace][time] = newJob;
+        cronMonitor[workspace][channel][time] = newJob;
 
         return newJob;
       };
       // schedules the initial cron job
       const job = new cron.CronJob(jobTime, onTick, onComplete, true, timezone);
-      // stores the job in the cronMonitor object for access
+
+      // stores the job in this large nested cronMonitor object for access
       if (cronMonitor[workspace]) {
-        cronMonitor[workspace][time] = job;
+        if (cronMonitor[workspace][channel]) {
+          if (cronMonitor[workspace][channel][time]) {
+            cronMonitor[workspace][channel][time] = job;
+          } else {
+            cronMonitor[workspace][channel][time] = job;
+          }
+        } else {
+          cronMonitor[workspace][channel] = {};
+          cronMonitor[workspace][channel][time] = job;
+        }
       } else {
         cronMonitor[workspace] = {};
-        cronMonitor[workspace][time] = job;
+        cronMonitor[workspace][channel] = {};
+        cronMonitor[workspace][channel][time] = job;
       }
       job.start();
     };

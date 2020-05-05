@@ -18,7 +18,7 @@ module.exports = {
         scheduledTime[time].min = min;
       }
     };
-    new cron.CronJob(
+    let scheduledRun = new cron.CronJob(
       `0 0 6 * * 1-5`,
       getDailyMessage,
       null,
@@ -26,6 +26,7 @@ module.exports = {
       "America/New_York"
     );
     getDailyMessage();
+    scheduledRun.start();
   },
   dailyMessage: scheduledTime,
 };
