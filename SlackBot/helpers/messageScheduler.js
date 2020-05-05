@@ -9,7 +9,7 @@ const messageScheduler = async (token, channel, workspace) => {
   const timezone = "America/New_York";
   const scheduledTime = {
     Morning: 9,
-    Midday: 12,
+    MidDay: 12,
     Afternoon: 15,
     Evening: 17,
   };
