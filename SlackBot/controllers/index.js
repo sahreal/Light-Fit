@@ -87,23 +87,34 @@ module.exports = {
       await slackEvents.remove(req.body);
     }
 
-    // if the user adds the bot to a channel
+    // if the user adds the bot to a channel add it in the db and schedule messages
     if (req.body.event.type === "member_joined_channel") {
-      if (process.env.APPID !== req.body.event.user) return;
-
+      // get the token associated with the requested workspace.
+      // create a bot client and get the user info
       const request = req.body;
       const workspaceId = request.team_id;
+      let workspace = await models.getOneWorkspace({
+        workspace_id: workspaceId,
+      });
+      workspace = workspace.toJSON();
+
+      let token = workspace.token;
+      token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+      token = token.toString(CryptoJS.enc.Utf8);
+
+      const bot = new WebClient(token);
+
+      let userData = await bot.users.info({
+        token: token,
+        user: req.body.event.user,
+      });
+
+      // compares the user profile api id to the slack bot api id listed on the website
+      if (userData.user.profile.api_app_id !== process.env.APPID) return;
+
       const channel = request.event.channel;
       let isAdded = await models.getOneWorkspace({ channel: channel });
       if (!isAdded) {
-        let workspace = await models.getOneWorkspace({
-          workspace_id: workspaceId,
-        });
-        workspace = workspace.toJSON();
-        let token = workspace.token;
-        token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
-        token = token.toString(CryptoJS.enc.Utf8);
-
         const workspaceDocument = {
           $setOnInsert: {
             workspace_id: request.team_id,
@@ -114,6 +125,7 @@ module.exports = {
             authed_user: request.event.inviter,
           },
         };
+        // add the workspace document then schedule the messages
         await models.oauth(workspaceDocument);
         messageScheduler(token, request.event.channel, request.team_id);
       }
@@ -133,10 +145,6 @@ module.exports = {
       token = token.toString(CryptoJS.enc.Utf8);
       const bot = new WebClient(token);
 
-      let test = await bot.conversations.info({
-        token: token,
-        channel: request.event.channel,
-      });
       let userId = request.event.user;
 
       const post = await bot.chat.postMessage({
