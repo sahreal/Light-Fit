@@ -19,7 +19,7 @@ module.exports = {
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers,
+        headers
       });
 
       if (resp.data.ok === false) {
@@ -37,7 +37,7 @@ module.exports = {
         bot = new WebClient(token);
         const userTZ = await bot.users.info({
           token: token,
-          user: userId,
+          user: userId
         });
 
         // format of the document to insert into the database
@@ -49,8 +49,8 @@ module.exports = {
             channel: resp.data.incoming_webhook.channel_id,
             channel_name: resp.data.incoming_webhook.channel,
             authed_user: resp.data.authed_user.id,
-            timezone: userTZ.user.tz,
-          },
+            timezone: userTZ.user.tz
+          }
         };
 
         models.oauth(workspaceDocument);
@@ -68,7 +68,7 @@ module.exports = {
           const post = await bot.chat.postMessage({
             channel: userId,
             text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-            as_user: "self",
+            as_user: "self"
           });
         })();
       }
@@ -83,6 +83,7 @@ module.exports = {
   },
   events: async (req, res) => {
     //Handle slack initial verification
+    console.log(req.body, "REQ");
     if (req.body.challenge) {
       res.status(200).send({ challenge: req.body.challenge });
     }
@@ -109,5 +110,10 @@ module.exports = {
 
     // await slackEvents.addBot(workspaceDocument);
     //}
-  },
+  }
+  // homeMessage: async (req, res) => {
+  //   //Handle slack initial verification
+
+  //   await slackEvents.app_home_opened(req.body);
+  //}
 };

@@ -2,7 +2,7 @@ const cronMonitor = require("./cronMonitor.js").monitor;
 const models = require("../models/index.js");
 
 module.exports = {
-  remove: async (event) => {
+  remove: async event => {
     const workspaceId = event.team_id;
     const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
     // Removes the job from the DB
@@ -21,4 +21,12 @@ module.exports = {
   // addBot: async (event) => {
   //   await models.oauth();
   // },
+  respond: async event => {
+    const workspaceId = event.team_id;
+    const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
+    // Removes the job from the DB
+    await models.removeWorkspace(workspaceId);
+
+    return;
+  }
 };
