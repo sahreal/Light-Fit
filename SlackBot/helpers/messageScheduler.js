@@ -22,13 +22,17 @@ const messageScheduler = async (token, channel, workspace) => {
 
       // Scheduled job to execute
       const onTick = async () => {
-        await bot.chat.postMessage({
-          channel: channel,
-          text: dailyMessage[time].prompt, // Pulled from daily refresh
-        });
-        // removes job from the cronMonitor object to avoid errors in workspace uninstall process
-        cronMonitor[workspace][channel][time] = null;
-        job.stop(); // stop the job from running
+        try {
+          await bot.chat.postMessage({
+            channel: channel,
+            text: dailyMessage[time].prompt, // Pulled from daily refresh
+          });
+          // removes job from the cronMonitor object to avoid errors in workspace uninstall process
+          cronMonitor[workspace][channel][time] = null;
+          job.stop(); // stop the job from running
+        } catch (err) {
+          console.log(`Post Message Error: ${new Date()} \n ${err}`);
+        }
       };
 
       // Fires each day the onTick completes
