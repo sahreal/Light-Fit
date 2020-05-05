@@ -12,14 +12,14 @@ const dailyMessage = require("./helpers/getUnsentMessage.js");
 
 app.use(express.static(path.join(__dirname, "./Landing_page /dist/")));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", routes);
 
 // On server start up have the system reschedule all messages and set up the daily message and time scheduler
 dailyMessage.getUnsentMessages();
 reschedule.rescheduleMessages();
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
   console.log(`SlackBot is running locally http://localhost:${port}`)

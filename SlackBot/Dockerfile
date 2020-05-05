@@ -7,4 +7,4 @@ RUN npm install
 RUN apt-get update && apt-get install nano
 
 EXPOSE 8080
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
