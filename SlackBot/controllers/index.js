@@ -32,18 +32,7 @@ module.exports = {
       userId = await resp.data.authed_user.id;
 
       if (token) {
-<<<<<<< HEAD
-        // If a token is received get the user's timezone info
-        // Add it to the workspace object and send the object to the DB
-        bot = new WebClient(token);
-        const userTZ = await bot.users.info({
-          token: token,
-          user: userId
-        });
-
-=======
         // If a token is received send the workspace object to the DB
->>>>>>> 77897de251c0b3ccbbef7cbe119a8ce7e0d942ff
         // format of the document to insert into the database
         const workspaceDocument = {
           $setOnInsert: {
@@ -52,13 +41,8 @@ module.exports = {
             token: token,
             channel: resp.data.incoming_webhook.channel_id,
             channel_name: resp.data.incoming_webhook.channel,
-            authed_user: resp.data.authed_user.id,
-<<<<<<< HEAD
-            timezone: userTZ.user.tz
+            authed_user: resp.data.authed_user.id
           }
-=======
-          },
->>>>>>> 77897de251c0b3ccbbef7cbe119a8ce7e0d942ff
         };
 
         models.oauth(workspaceDocument);
@@ -71,7 +55,7 @@ module.exports = {
           const bot = new WebClient(token);
           const post = await bot.chat.postMessage({
             channel: userId,
-            text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
+            text: `Hey there, thanks for welcoming me to your workspace! I am Working Well by Light + Fit and I will be sending daily tips, reminders and videos to add some light and wellness to your routine. (Spoiler alert: get ready to drink a lot of water).`,
             as_user: "self"
           });
         })();
@@ -104,31 +88,6 @@ module.exports = {
       await slackEvents.remove(req.body);
     }
 
-<<<<<<< HEAD
-    /* TODO: App mention functionality. Possible use after initial authorization.
-    Needs Event scope permissions */
-    //if (req.body.event.type === "app_mention") {
-    // const workspaceDocument = {
-    //   $setOnInsert: {
-    //     workspace_id: resp.body.team_id,
-    //     workspace_name: resp.data.team.name,
-    //     token: res.body.token,
-    //     channel: resp.body.event.channel,
-    //     channel_name: resp.data.incoming_webhook.channel,
-    //     authed_user: resp.data.authed_user.id,
-    //     timezone: userTZ.user.tz,
-    //   },
-    // };
-
-    // await slackEvents.addBot(workspaceDocument);
-    //}
-  }
-  // homeMessage: async (req, res) => {
-  //   //Handle slack initial verification
-
-  //   await slackEvents.app_home_opened(req.body);
-  //}
-=======
     // if the user adds the bot to a channel
     if (req.body.event.type === "member_joined_channel") {
       if (process.env.APPID !== req.body.event.user) return;
@@ -139,7 +98,7 @@ module.exports = {
       let isAdded = await models.getOneWorkspace({ channel: channel });
       if (!isAdded) {
         let workspace = await models.getOneWorkspace({
-          workspace_id: workspaceId,
+          workspace_id: workspaceId
         });
         workspace = workspace.toJSON();
         let token = workspace.token;
@@ -153,8 +112,8 @@ module.exports = {
             token: token,
             channel: request.event.channel,
             channel_name: null,
-            authed_user: request.event.inviter,
-          },
+            authed_user: request.event.inviter
+          }
         };
         await models.oauth(workspaceDocument);
         messageScheduler(token, request.event.channel, request.team_id);
@@ -167,7 +126,7 @@ module.exports = {
       const request = req.body;
       const workspaceId = request.team_id;
       let workspace = await models.getOneWorkspace({
-        workspace_id: workspaceId,
+        workspace_id: workspaceId
       });
       workspace = workspace.toJSON();
       let token = workspace.token;
@@ -177,14 +136,14 @@ module.exports = {
 
       let test = await bot.conversations.info({
         token: token,
-        channel: request.event.channel,
+        channel: request.event.channel
       });
       let userId = request.event.user;
 
       const post = await bot.chat.postMessage({
         channel: userId,
-        text: `Thank you for reaching out to Working Well by Light + Fit`, // Message to send to user when contacting the app
-        as_user: "self",
+        text: `Thank you for reaching out to Working Well by Light + Fit, this is an automated bot only meant to send scheduled messages every few hours`, // Message to send to user when contacting the app
+        as_user: "self"
       });
     }
   },
@@ -195,8 +154,7 @@ module.exports = {
     return res
       .status(200)
       .send(
-        "Working Well by Light and Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
+        "Working Well by Light + Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
       );
-  },
->>>>>>> 77897de251c0b3ccbbef7cbe119a8ce7e0d942ff
+  }
 };
