@@ -20,7 +20,7 @@ module.exports = {
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers,
+        headers
       });
 
       if (resp.data.ok === false) {
@@ -41,8 +41,8 @@ module.exports = {
             token: token,
             channel: resp.data.incoming_webhook.channel_id,
             channel_name: resp.data.incoming_webhook.channel,
-            authed_user: resp.data.authed_user.id,
-          },
+            authed_user: resp.data.authed_user.id
+          }
         };
 
         models.oauth(workspaceDocument);
@@ -55,8 +55,8 @@ module.exports = {
           const bot = new WebClient(token);
           const post = await bot.chat.postMessage({
             channel: userId,
-            text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
-            as_user: "self",
+            text: `Hey there, thanks for welcoming me to your workspace! I am Working Well by Light + Fit and I will be sending daily tips, reminders and videos to add some light and wellness to your routine. (Spoiler alert: get ready to drink a lot of water).`,
+            as_user: "self"
           });
         })();
       }
@@ -74,6 +74,7 @@ module.exports = {
 
     console.log(req.body);
     //Handle slack initial verification
+    console.log(req.body, "REQ");
     if (req.body.challenge) {
       return res.status(200).send({ challenge: req.body.challenge });
     }
@@ -115,6 +116,15 @@ module.exports = {
       const channel = request.event.channel;
       let isAdded = await models.getOneWorkspace({ channel: channel });
       if (!isAdded) {
+
+        let workspace = await models.getOneWorkspace({
+          workspace_id: workspaceId
+        });
+        workspace = workspace.toJSON();
+        let token = workspace.token;
+        token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+        token = token.toString(CryptoJS.enc.Utf8);
+
         const workspaceDocument = {
           $setOnInsert: {
             workspace_id: request.team_id,
@@ -122,8 +132,8 @@ module.exports = {
             token: token,
             channel: request.event.channel,
             channel_name: null,
-            authed_user: request.event.inviter,
-          },
+            authed_user: request.event.inviter
+          }
         };
         // add the workspace document then schedule the messages
         await models.oauth(workspaceDocument);
@@ -137,7 +147,7 @@ module.exports = {
       const request = req.body;
       const workspaceId = request.team_id;
       let workspace = await models.getOneWorkspace({
-        workspace_id: workspaceId,
+        workspace_id: workspaceId
       });
       workspace = workspace.toJSON();
       let token = workspace.token;
@@ -145,12 +155,17 @@ module.exports = {
       token = token.toString(CryptoJS.enc.Utf8);
       const bot = new WebClient(token);
 
+      let test = await bot.conversations.info({
+        token: token,
+        channel: request.event.channel
+      });
+
       let userId = request.event.user;
 
       const post = await bot.chat.postMessage({
         channel: userId,
-        text: `Thank you for reaching out to Working Well by Light + Fit`, // Message to send to user when contacting the app
-        as_user: "self",
+        text: `Thank you for reaching out to Working Well by Light + Fit, this is an automated bot only meant to send scheduled messages every few hours`, // Message to send to user when contacting the app
+        as_user: "self"
       });
     }
   },
@@ -161,7 +176,7 @@ module.exports = {
     return res
       .status(200)
       .send(
-        "Working Well by Light and Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
+        "Working Well by Light + Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
       );
-  },
+  }
 };

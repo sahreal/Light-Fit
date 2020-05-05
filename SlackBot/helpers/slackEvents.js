@@ -2,7 +2,7 @@ const cronMonitor = require("./cronMonitor.js").monitor;
 const models = require("../models/index.js");
 
 module.exports = {
-  remove: async (event) => {
+  remove: async event => {
     const workspaceId = event.team_id;
     const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
     // Removes the job from the DB
@@ -20,6 +20,21 @@ module.exports = {
     delete jobs;
     return;
   },
+<<<<<<< HEAD
+  // TODO: Possible implementation after first approval.
+  // Allows users to include the bot by mention. Incomplete implementation
+  // addBot: async (event) => {
+  //   await models.oauth();
+  // },
+  respond: async event => {
+    const workspaceId = event.team_id;
+    const jobs = cronMonitor[workspaceId]; // gets the job related to that workspace
+    // Removes the job from the DB
+    await models.removeWorkspace(workspaceId);
+
+    return;
+  }
+=======
   removeOne: async (event) => {
     const workspaceId = event.team_id;
     const channel = event.channel_id;
@@ -33,4 +48,5 @@ module.exports = {
     }
     return;
   },
+>>>>>>> 77897de251c0b3ccbbef7cbe119a8ce7e0d942ff
 };
