@@ -2,6 +2,7 @@ const models = require("../models/index.js");
 const axios = require("axios");
 const { WebClient } = require("@slack/web-api");
 const messageScheduler = require("../helpers/messageScheduler.js");
+const CryptoJS = require("crypto-js");
 const slackEvents = require("../helpers/slackEvents.js");
 
 module.exports = {
@@ -30,16 +31,8 @@ module.exports = {
       addedChannel = await resp.data.incoming_webhook.channel;
       userId = await resp.data.authed_user.id;
 
-      let bot;
       if (token) {
-        // If a token is received get the user's timezone info
-        // Add it to the workspace object and send the object to the DB
-        bot = new WebClient(token);
-        const userTZ = await bot.users.info({
-          token: token,
-          user: userId,
-        });
-
+        // If a token is received send the workspace object to the DB
         // format of the document to insert into the database
         const workspaceDocument = {
           $setOnInsert: {
@@ -49,22 +42,17 @@ module.exports = {
             channel: resp.data.incoming_webhook.channel_id,
             channel_name: resp.data.incoming_webhook.channel,
             authed_user: resp.data.authed_user.id,
-            timezone: userTZ.user.tz,
           },
         };
 
         models.oauth(workspaceDocument);
         // schedule messages
-        messageScheduler(
-          token,
-          addedChannel,
-          userTZ.user.tz,
-          resp.data.team.id
-        );
+        messageScheduler(token, addedChannel, resp.data.team.id);
 
         (async () => {
           // send the user a welcome message whenever a user installs the slack app to their workspace
           // Use the access token and user id from the auth response
+          const bot = new WebClient(token);
           const post = await bot.chat.postMessage({
             channel: userId,
             text: `Hey I am Working Well by Light + Fit. Thanks for adding me to the workspace. I will post messages to your ${addedChannel} channel`,
@@ -84,7 +72,18 @@ module.exports = {
   events: async (req, res) => {
     //Handle slack initial verification
     if (req.body.challenge) {
-      res.status(200).send({ challenge: req.body.challenge });
+      return res.status(200).send({ challenge: req.body.challenge });
+    }
+
+    console.log(
+      req.body.token,
+      process.env.VERIFICATIONID,
+      process.env.VERIFICATIONID === req.body.token
+    );
+
+    // checks request validity. Whether the request came from Slack or not
+    if (req.body.token !== process.env.VERIFICATIONID) {
+      return res.status(400).send("Invalid Request.");
     }
 
     if (req.body.event.type === "app_uninstalled") {
@@ -92,22 +91,43 @@ module.exports = {
       res.sendStatus(204);
     }
 
-    /* TODO: App mention functionality. Possible use after initial authorization.
-    Needs Event scope permissions */
-    //if (req.body.event.type === "app_mention") {
-    // const workspaceDocument = {
-    //   $setOnInsert: {
-    //     workspace_id: resp.body.team_id,
-    //     workspace_name: resp.data.team.name,
-    //     token: res.body.token,
-    //     channel: resp.body.event.channel,
-    //     channel_name: resp.data.incoming_webhook.channel,
-    //     authed_user: resp.data.authed_user.id,
-    //     timezone: userTZ.user.tz,
-    //   },
-    // };
+    if (req.body.event.type === "member_joined_channel") {
+      const request = req.body;
+      const workspaceId = request.team_id;
+      const channel = request.event.channel;
+      let isAdded = await models.getOneWorkspace({ channel: channel });
+      if (!isAdded) {
+        // let workspace = await models.getOneWorkspace({
+        //   workspace_id: workspaceId,
+        // });
+        // workspace = workspace.toJSON();
+        // let token = workspace.token;
+        // token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+        // token = token.toString(CryptoJS.enc.Utf8);
 
-    // await slackEvents.addBot(workspaceDocument);
-    //}
+        // const workspaceDocument = {
+        //   $setOnInsert: {
+        //     workspace_id: request.team_id,
+        //     workspace_name: workspace.workspace_name,
+        //     token: token,
+        //     channel: request.event.channel,
+        //     channel_name: null,
+        //     authed_user: request.event.inviter,
+        //   },
+        // };
+        // await models.oauth(workspaceDocument);
+        // messageScheduler(token, request.event.channel, request.event.channel);
+
+        return res.sendStatus(200);
+      }
+    }
+    /*
+      =====================================
+      USE HERE FOR MESSAGE IM's
+      =====================================
+      */
+  },
+  slashCommands: (req, res) => {
+    console.log(req.body);
   },
 };

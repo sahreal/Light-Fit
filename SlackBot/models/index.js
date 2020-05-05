@@ -19,7 +19,7 @@ module.exports = {
           upsert: true,
         }
       );
-      // if the inserted token gets inserted update the count collection
+      // if the inserted token gets inserted update the count collection with total distinct workspaces
       if (!!!insertToken.value) {
         const count = await db.WorkspaceData.collection.distinct(
           "workspace_id"
@@ -33,6 +33,9 @@ module.exports = {
   getAllWorkspaces: async () => {
     const data = await db.WorkspaceData.find();
     return data;
+  },
+  getOneWorkspace: async (query) => {
+    return await db.WorkspaceData.findOne(query);
   },
   removeWorkspace: async (workspaceId) => {
     return await db.WorkspaceData.deleteMany({ workspace_id: workspaceId });

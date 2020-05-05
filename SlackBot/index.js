@@ -18,7 +18,7 @@ app.use("/", routes);
 dailyMessage.getUnsentMessages();
 reschedule.rescheduleMessages();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 
 app.listen(port, () =>
   console.log(`SlackBot is running locally http://localhost:${port}`)

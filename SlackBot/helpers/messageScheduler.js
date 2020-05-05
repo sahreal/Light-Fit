@@ -3,10 +3,10 @@ const { WebClient } = require("@slack/web-api");
 const cronMonitor = require("./cronMonitor.js").monitor;
 const dailyMessage = require("./getUnsentMessage.js").dailyMessage;
 
-const messageScheduler = async (token, channel, timezone, workspace) => {
+const messageScheduler = async (token, channel, workspace) => {
   // initialize a bot client
   const bot = new WebClient(token);
-
+  const timezone = "America/New_York";
   const scheduledTime = {
     Morning: 9,
     Midday: 12,
