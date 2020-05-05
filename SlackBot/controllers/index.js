@@ -72,7 +72,6 @@ module.exports = {
   events: async (req, res) => {
     res.sendStatus(200); // Must send slack an immediate response or it sends multiple retries
 
-    console.log(req.body);
     //Handle slack initial verification
     if (req.body.challenge) {
       return res.status(200).send({ challenge: req.body.challenge });
