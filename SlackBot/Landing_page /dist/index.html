@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Landing Page</title>
+    <title>Dannon Light+Fit</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="shortcut icon" type="image/png" href="transparent.png" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=.7" />
     <style>
       @font-face {
         font-family: "mont-heavy";
@@ -14,7 +15,11 @@
   </head>
   <body>
     <div class="header">
-      <img src="./transparent.png" />
+      <img
+        srcset="./transparent.png 1x, ./transparent-small.png 2x"
+        alt="…"
+        id="logo"
+      />
       <div class="header-text">
         <a href="privacy.html" target="_blank">Privacy Policy</a>
         <a href="contact.html" target="_blank">Contact Us</a>
@@ -73,7 +78,7 @@
         </div>
       </div>
       <a
-        href="https://slack.com/oauth/v2/authorize?client_id=1041120149622.1081472322500&scope=app_mentions:read,channels:history,channels:join,channels:read,chat:write,chat:write.public,commands,groups:history,groups:read,im:history,incoming-webhook,links:write,mpim:history,users:read,im:read,mpim:read&user_scope=channels:history,channels:read,groups:history,groups:read,im:history,mpim:history,mpim:read&redirect_uri=https://lightandfitworkingwell.app:443/app-slack-oauth"
+        href="https://slack.com/oauth/v2/authorize?client_id=1041120149622.1081472322500&scope=app_mentions:read,channels:history,channels:join,channels:read,chat:write,chat:write.public,commands,groups:history,groups:read,im:history,incoming-webhook,mpim:history,users:read,im:read,mpim:read&user_scope=channels:history,channels:read,groups:history,groups:read,im:history,mpim:history,mpim:read&redirect_uri=https://lightandfitworkingwell.app:443/app-slack-oauth"
         ><img
           id="slack-button"
           alt="Add to Slack"
