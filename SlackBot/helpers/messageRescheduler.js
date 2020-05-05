@@ -15,7 +15,6 @@ module.exports = {
         messageScheduler(
           workspace.token,
           workspace.channel,
-          workspace.timezone,
           workspace.workspace_id
         );
       });

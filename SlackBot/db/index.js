@@ -28,7 +28,6 @@ const WorkspaceDataSchema = new mongoose.Schema({
   channel: String,
   channel_name: String,
   authed_user: String,
-  timezone: String,
 });
 
 const TokenCountSchema = new mongoose.Schema({
