@@ -70,64 +70,90 @@ module.exports = {
     }
   },
   events: async (req, res) => {
+    res.sendStatus(200); // Must send slack an immediate response or it sends multiple retries
+
+    console.log(req.body);
     //Handle slack initial verification
     if (req.body.challenge) {
       return res.status(200).send({ challenge: req.body.challenge });
     }
 
-    console.log(
-      req.body.token,
-      process.env.VERIFICATIONID,
-      process.env.VERIFICATIONID === req.body.token
-    );
-
     // checks request validity. Whether the request came from Slack or not
     if (req.body.token !== process.env.VERIFICATIONID) {
-      return res.status(400).send("Invalid Request.");
+      return;
     }
 
     if (req.body.event.type === "app_uninstalled") {
       await slackEvents.remove(req.body);
-      res.sendStatus(204);
     }
 
+    // if the user adds the bot to a channel
     if (req.body.event.type === "member_joined_channel") {
+      if (process.env.APPID !== req.body.event.user) return;
+
       const request = req.body;
       const workspaceId = request.team_id;
       const channel = request.event.channel;
       let isAdded = await models.getOneWorkspace({ channel: channel });
       if (!isAdded) {
-        // let workspace = await models.getOneWorkspace({
-        //   workspace_id: workspaceId,
-        // });
-        // workspace = workspace.toJSON();
-        // let token = workspace.token;
-        // token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
-        // token = token.toString(CryptoJS.enc.Utf8);
+        let workspace = await models.getOneWorkspace({
+          workspace_id: workspaceId,
+        });
+        workspace = workspace.toJSON();
+        let token = workspace.token;
+        token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+        token = token.toString(CryptoJS.enc.Utf8);
 
-        // const workspaceDocument = {
-        //   $setOnInsert: {
-        //     workspace_id: request.team_id,
-        //     workspace_name: workspace.workspace_name,
-        //     token: token,
-        //     channel: request.event.channel,
-        //     channel_name: null,
-        //     authed_user: request.event.inviter,
-        //   },
-        // };
-        // await models.oauth(workspaceDocument);
-        // messageScheduler(token, request.event.channel, request.event.channel);
-
-        return res.sendStatus(200);
+        const workspaceDocument = {
+          $setOnInsert: {
+            workspace_id: request.team_id,
+            workspace_name: workspace.workspace_name,
+            token: token,
+            channel: request.event.channel,
+            channel_name: null,
+            authed_user: request.event.inviter,
+          },
+        };
+        await models.oauth(workspaceDocument);
+        messageScheduler(token, request.event.channel, request.team_id);
       }
     }
-    /*
-      =====================================
-      USE HERE FOR MESSAGE IM's
-      =====================================
-      */
+
+    // if a user IMs the slackbot
+    if (req.body.event.channel_type === "im") {
+      if (req.body.event.bot_id) return; // if the message is from the bot return
+      const request = req.body;
+      const workspaceId = request.team_id;
+      let workspace = await models.getOneWorkspace({
+        workspace_id: workspaceId,
+      });
+      workspace = workspace.toJSON();
+      let token = workspace.token;
+      token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+      token = token.toString(CryptoJS.enc.Utf8);
+      const bot = new WebClient(token);
+
+      let test = await bot.conversations.info({
+        token: token,
+        channel: request.event.channel,
+      });
+      let userId = request.event.user;
+
+      const post = await bot.chat.postMessage({
+        channel: userId,
+        text: `Thank you for reaching out to Working Well by Light + Fit`, // Message to send to user when contacting the app
+        as_user: "self",
+      });
+    }
   },
   slashCommands: (req, res) => {
-    console.log(req.body);
+    // slash command to stop the bot from posting in a single channel.
+    // However the person would need to also remove the app from the channel if it was invited to the channel.
+    slackEvents.removeOne(req.body);
+    return res
+      .status(200)
+      .send(
+        "Working Well by Light and Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
+      );
   },
 };

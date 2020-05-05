@@ -37,8 +37,8 @@ module.exports = {
   getOneWorkspace: async (query) => {
     return await db.WorkspaceData.findOne(query);
   },
-  removeWorkspace: async (workspaceId) => {
-    return await db.WorkspaceData.deleteMany({ workspace_id: workspaceId });
+  removeWorkspace: async (query) => {
+    return await db.WorkspaceData.deleteMany(query);
   },
   getMessage: async (collectionName) => {
     try {

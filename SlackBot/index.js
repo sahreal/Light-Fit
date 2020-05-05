@@ -12,6 +12,7 @@ const dailyMessage = require("./helpers/getUnsentMessage.js");
 
 app.use(express.static(path.join(__dirname, "./Landing_page /dist/")));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use("/", routes);
 
 // On server start up have the system reschedule all messages and set up the daily message and time scheduler
