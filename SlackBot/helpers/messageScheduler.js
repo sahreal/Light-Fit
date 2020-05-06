@@ -8,17 +8,18 @@ const messageScheduler = async (token, channel, workspace) => {
   const bot = new WebClient(token);
   const timezone = "America/New_York";
   const scheduledTime = {
-    Morning: 9,
-    MidDay: 12,
-    Afternoon: 15,
-    Evening: 17,
+    Morning: { hour: 9, min: 25 },
+    MidDay: { hour: 12, min: 42 },
+    Afternoon: { hour: 15, min: 17 },
+    Evening: { hour: 17, min: 36 },
   };
 
   for (const time in scheduledTime) {
     // uses cron to schedule a job to run at the each time defined in the scheduledTime object
     const scheduleJob = () => {
-      const hour = scheduledTime[time];
-      const jobTime = `0 30 ${hour} * * 1-5`;
+      const hour = scheduledTime[time].hour;
+      const min = scheduledTime[time].min;
+      const jobTime = `0 ${min} ${hour} * * 1-5`;
 
       // Scheduled job to execute
       const onTick = async () => {
@@ -37,7 +38,7 @@ const messageScheduler = async (token, channel, workspace) => {
 
       // Fires each day the onTick completes
       const onComplete = () => {
-        const hour = scheduledTime[time];
+        const hour = scheduledTime[time].hour;
         const min = dailyMessage[time].min;
         let day = new Date().getDay();
         if (Number(day) >= 5) {
