@@ -6,7 +6,6 @@ html {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-repeat: no-repeat;
-  font-family: "mont";
 }
 
 @font-face {
@@ -25,6 +24,11 @@ html {
   src: url(GothamRnd-Light.woff);
 }
 
+@font-face {
+  font-family: "gotham-heavy";
+  src: url(GothamRnd-Medium.woff);
+}
+
 body {
   height: 100%;
   background: linear-gradient(
@@ -38,7 +42,7 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: "lightfit", "gotham";
+  font-family: "gotham";
 }
 
 .header {
@@ -104,4 +108,5 @@ a img {
 
 .title {
   color: whitesmoke;
+  font-family: "lightfit";
 }
