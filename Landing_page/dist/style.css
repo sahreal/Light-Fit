@@ -27,6 +27,10 @@ html {
   src: url(GothamRnd-Medium.woff);
 }
 
+@media only screen and (max-width: 320px) {
+  /* styles for narrow screens */
+}
+
 body {
   background: linear-gradient(
     324deg,
