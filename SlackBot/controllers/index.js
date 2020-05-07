@@ -20,7 +20,7 @@ module.exports = {
     try {
       // call to slack oauth for new workspace data
       resp = await axios.post("https://slack.com/api/oauth.v2.access", body, {
-        headers
+        headers,
       });
 
       if (resp.data.ok === false) {
@@ -41,8 +41,8 @@ module.exports = {
             token: token,
             channel: resp.data.incoming_webhook.channel_id,
             channel_name: resp.data.incoming_webhook.channel,
-            authed_user: resp.data.authed_user.id
-          }
+            authed_user: resp.data.authed_user.id,
+          },
         };
 
         models.oauth(workspaceDocument);
@@ -55,8 +55,8 @@ module.exports = {
           const bot = new WebClient(token);
           const post = await bot.chat.postMessage({
             channel: userId,
-            text: `Hey there, thanks for welcoming me to your workspace! I am Working Well by Light + Fit and I will be sending daily tips, reminders and videos to add some light and wellness to your routine. (Spoiler alert: get ready to drink a lot of water).`,
-            as_user: "self"
+            text: `Hey there, thanks for welcoming me to your workspace! I am Working Well by Light + Fit and I will be sending daily tips, reminders and videos to add some light and wellness to your routine. (Spoiler alert: get ready to drink a lot of water).`,
+            as_user: "self",
           });
         })();
       }
@@ -70,14 +70,12 @@ module.exports = {
     }
   },
   events: async (req, res) => {
-    res.sendStatus(200); // Must send slack an immediate response or it sends multiple retries
-
-    console.log(req.body);
     //Handle slack initial verification
-    console.log(req.body, "REQ");
     if (req.body.challenge) {
       return res.status(200).send({ challenge: req.body.challenge });
     }
+
+    res.sendStatus(200); // Must send slack an immediate response or it sends multiple retries
 
     // checks request validity. Whether the request came from Slack or not
     if (req.body.token !== process.env.VERIFICATIONID) {
@@ -116,15 +114,6 @@ module.exports = {
       const channel = request.event.channel;
       let isAdded = await models.getOneWorkspace({ channel: channel });
       if (!isAdded) {
-
-        let workspace = await models.getOneWorkspace({
-          workspace_id: workspaceId
-        });
-        workspace = workspace.toJSON();
-        let token = workspace.token;
-        token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
-        token = token.toString(CryptoJS.enc.Utf8);
-
         const workspaceDocument = {
           $setOnInsert: {
             workspace_id: request.team_id,
@@ -132,8 +121,8 @@ module.exports = {
             token: token,
             channel: request.event.channel,
             channel_name: null,
-            authed_user: request.event.inviter
-          }
+            authed_user: request.event.inviter,
+          },
         };
         // add the workspace document then schedule the messages
         await models.oauth(workspaceDocument);
@@ -141,13 +130,46 @@ module.exports = {
       }
     }
 
-    // if a user IMs the slackbot
-    if (req.body.event.channel_type === "im") {
-      if (req.body.event.bot_id) return; // if the message is from the bot return
+    if (
+      req.body.event.channel_type === "im" &&
+      req.body.event.text.includes("You have been removed")
+    ) {
       const request = req.body;
       const workspaceId = request.team_id;
       let workspace = await models.getOneWorkspace({
-        workspace_id: workspaceId
+        workspace_id: workspaceId,
+      });
+      workspace = workspace.toJSON();
+      let token = workspace.token;
+      token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+      token = token.toString(CryptoJS.enc.Utf8);
+      const bot = new WebClient(token);
+      let channel = req.body.event.text.split(" ").filter((word) => {
+        if (word[0] === "#") return word;
+      });
+      let test = await bot.conversations.list({
+        token: token,
+      });
+      let id = test.channels.filter((chan) => {
+        if (`#${chan.name}` === channel[0]) {
+          return chan;
+        }
+      });
+      id = id[0].id;
+
+      let workspaceData = { team_id: workspaceId, channel_id: id };
+
+      slackEvents.removeOne(workspaceData);
+    }
+
+    // if a user IMs the slackbot
+    if (req.body.event.channel_type === "im") {
+      if (req.body.event.bot_id || req.body.event.user === "USLACKBOT")
+        return null; // if the message is from the bot return
+      const request = req.body;
+      const workspaceId = request.team_id;
+      let workspace = await models.getOneWorkspace({
+        workspace_id: workspaceId,
       });
       workspace = workspace.toJSON();
       let token = workspace.token;
@@ -155,17 +177,12 @@ module.exports = {
       token = token.toString(CryptoJS.enc.Utf8);
       const bot = new WebClient(token);
 
-      let test = await bot.conversations.info({
-        token: token,
-        channel: request.event.channel
-      });
-
       let userId = request.event.user;
 
       const post = await bot.chat.postMessage({
         channel: userId,
         text: `Thank you for reaching out to Working Well by Light + Fit, this is an automated bot only meant to send scheduled messages every few hours`, // Message to send to user when contacting the app
-        as_user: "self"
+        as_user: "self",
       });
     }
   },
@@ -178,5 +195,5 @@ module.exports = {
       .send(
         "Working Well by Light + Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
       );
-  }
+  },
 };

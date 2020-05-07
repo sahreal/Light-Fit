@@ -6,13 +6,20 @@ html {
 }
 
 @font-face {
-  font-family: "mont";
-  src: url(Mont.woff);
+  font-family: "lightfit";
+  src: url(LightFit-Hand-Regular.woff);
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "mont-heavy";
-  src: url(Mont.woff);
+  font-family: "lightfit-heavy";
+  src: url(LightFit-Hand-Bold.woff);
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "gotham";
+  src: url(GothamRnd-Light.woff);
 }
 
 body {
@@ -24,7 +31,8 @@ body {
   );
   margin: 0;
   padding: 0;
-  font-family: "mont";
+  font-family: "lightfit";
+  font-size: 110%;
 }
 
 #logo {
@@ -73,7 +81,7 @@ h1 {
   height: 100%;
 }
 
-a img {
+#slack-button {
   display: block;
   margin-left: auto;
   margin-right: auto;

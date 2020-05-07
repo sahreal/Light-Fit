@@ -10,13 +10,23 @@ html {
 }
 
 @font-face {
-  font-family: "mont";
-  src: url(Mont.woff);
+  font-family: "lightfit";
+  src: url(LightFit-Hand-Regular.woff);
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "lightfit-heavy";
+  src: url(LightFit-Hand-Bold.woff);
+}
+
+@font-face {
+  font-family: "gotham";
+  src: url(GothamRnd-Light.woff);
 }
 
 body {
   height: 100%;
-  background: rgb(255, 255, 255);
   background: linear-gradient(
       324deg,
       rgba(255, 255, 255, 1) 0%,
@@ -28,7 +38,7 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: "mont";
+  font-family: "lightfit", "gotham";
 }
 
 .header {
