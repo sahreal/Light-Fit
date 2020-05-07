@@ -20,6 +20,8 @@ module.exports = {
         }
       );
       // if the inserted token gets inserted update the count collection with total distinct workspaces
+      // insertToken returns null if the token has been inserted. You need the triple bang to change the
+      // falsy value to true
       if (!!!insertToken.value) {
         const count = await db.WorkspaceData.collection.distinct(
           "workspace_id"

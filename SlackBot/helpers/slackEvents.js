@@ -23,7 +23,14 @@ module.exports = {
   removeOne: async (event) => {
     const workspaceId = event.team_id;
     const channel = event.channel_id;
-    const jobTimes = cronMonitor[workspaceId][channel];
+    const jobTimes = cronMonitor[workspaceId];
+
+    // ensure that the bot has jobs associated to the workspace
+    try {
+      jobTimes = jobTimes[channel];
+    } catch (err) {
+      return null;
+    }
 
     await models.removeWorkspace({ channel: channel });
 
@@ -31,6 +38,17 @@ module.exports = {
       let job = jobTimes[times];
       job.stop();
     }
-    return;
+    return true;
+  },
+  getToken: async (request) => {
+    const workspaceId = request.team_id;
+    let workspace = await models.getOneWorkspace({
+      workspace_id: workspaceId,
+    });
+    workspace = workspace.toJSON();
+    let token = workspace.token;
+    token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
+    token = token.toString(CryptoJS.enc.Utf8);
+    return token;
   },
 };

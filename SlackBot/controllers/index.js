@@ -61,9 +61,7 @@ module.exports = {
         })();
       }
 
-      res
-        .status(302)
-        .redirect("https://slack.com/apps/A012DDW9GEQ-coolbot?next_id=0");
+      res.status(302).redirect("https://slack.com/apps/A012DDW9GEQ");
     } catch (err) {
       console.error(`ERROR: ${err}`);
       res.status(302).redirect("https://lightandfitworkingwell.app:443/");
@@ -77,29 +75,27 @@ module.exports = {
 
     res.sendStatus(200); // Must send slack an immediate response or it sends multiple retries
 
-    // checks request validity. Whether the request came from Slack or not
-    if (req.body.token !== process.env.VERIFICATIONID) {
-      return;
-    }
+    /*
+    ================================
+    UNINSTALLED FROM WORKSPACE 
+    ================================
+    */
 
     if (req.body.event.type === "app_uninstalled") {
       await slackEvents.remove(req.body);
     }
 
+    /*
+    ==================================
+    INVITED TO THE CHANNEL BY @MENTION
+    ==================================
+    */
+
     // if the user adds the bot to a channel add it in the db and schedule messages
     if (req.body.event.type === "member_joined_channel") {
       // get the token associated with the requested workspace.
       // create a bot client and get the user info
-      const request = req.body;
-      const workspaceId = request.team_id;
-      let workspace = await models.getOneWorkspace({
-        workspace_id: workspaceId,
-      });
-      workspace = workspace.toJSON();
-
-      let token = workspace.token;
-      token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
-      token = token.toString(CryptoJS.enc.Utf8);
+      const token = await slackEvents.getToken(req.body);
 
       const bot = new WebClient(token);
 
@@ -129,20 +125,17 @@ module.exports = {
         messageScheduler(token, request.event.channel, request.team_id);
       }
     }
+    /*
+    ================================
+    REMOVED FROM WORKSPACE BY SLACK 
+    ================================
+    */
 
     if (
       req.body.event.channel_type === "im" &&
       req.body.event.text.includes("You have been removed")
     ) {
-      const request = req.body;
-      const workspaceId = request.team_id;
-      let workspace = await models.getOneWorkspace({
-        workspace_id: workspaceId,
-      });
-      workspace = workspace.toJSON();
-      let token = workspace.token;
-      token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
-      token = token.toString(CryptoJS.enc.Utf8);
+      const token = await slackEvents.getToken(req.body);
       const bot = new WebClient(token);
       let channel = req.body.event.text.split(" ").filter((word) => {
         if (word[0] === "#") return word;
@@ -162,38 +155,57 @@ module.exports = {
       slackEvents.removeOne(workspaceData);
     }
 
+    /*
+    ================================
+    USER MESSAGES SLACKBOT 
+    ================================
+    */
+
     // if a user IMs the slackbot
     if (req.body.event.channel_type === "im") {
       if (req.body.event.bot_id || req.body.event.user === "USLACKBOT")
         return null; // if the message is from the bot return
-      const request = req.body;
-      const workspaceId = request.team_id;
-      let workspace = await models.getOneWorkspace({
-        workspace_id: workspaceId,
-      });
-      workspace = workspace.toJSON();
-      let token = workspace.token;
-      token = CryptoJS.AES.decrypt(token, process.env.SECRET_KEY);
-      token = token.toString(CryptoJS.enc.Utf8);
+      const token = await slackEvents.getToken(req.body);
       const bot = new WebClient(token);
 
       let userId = request.event.user;
 
+      // Message to send to user when contacting the app
       const post = await bot.chat.postMessage({
         channel: userId,
-        text: `Thank you for reaching out to Working Well by Light + Fit, this is an automated bot only meant to send scheduled messages every few hours`, // Message to send to user when contacting the app
+        text: `Thank you for reaching out to Working Well by Light + Fit, this is an automated bot only meant to send scheduled messages every few hours`,
         as_user: "self",
       });
     }
   },
-  slashCommands: (req, res) => {
-    // slash command to stop the bot from posting in a single channel.
-    // However the person would need to also remove the app from the channel if it was invited to the channel.
-    slackEvents.removeOne(req.body);
-    return res
-      .status(200)
-      .send(
-        "Working Well by Light + Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
-      );
+  // slash command to stop the bot from posting in a single channel.
+  // However the person would need to also remove the app from the channel if it was invited to the channel.
+  slashCommands: async (req, res) => {
+    // if "help" is sent with the slash command it responds with a help message
+    if (req.body.text.toLowerCase().includes("help")) {
+      return res
+        .status(200)
+        .send(
+          "You can use the '/revoke' slash command in any channel that Working Well by Light + Fit sends a message in. This will remove Working Well's permissions to send messages in the channel. \n \n If Working Well is a memeber of the channel, ask the workspace administrator to remove the app as a member of the channel instead."
+        );
+    }
+
+    // removes the bot from the db
+    let removed = await slackEvents.removeOne(req.body);
+
+    // if removed variable returns null send this message to the user
+    if (!removed) {
+      return res
+        .status(200)
+        .send(
+          "Working Well by Light + Fit does not have the permissions to post in this channel. You can use the /revoke command in channels that Working Well by Light + Fit posts messages into. "
+        );
+    } else {
+      return res
+        .status(200)
+        .send(
+          "Working Well by Light + Fit will stop posting in this channel. Please ask your workspace administrator to remove me from the channel if I am a member."
+        );
+    }
   },
 };
